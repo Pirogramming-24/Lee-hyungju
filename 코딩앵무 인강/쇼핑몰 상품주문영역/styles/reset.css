@@ -1,0 +1,10 @@
+/* @import url('https'); */
+* {box-sizing: border-box;}
+html,body,h1,h2,h3,div,dl,dd,dt,p,button,img,input,span{
+    margin: 0; padding: 0;
+    font-size: 1.0rem; font-weight: normal; font-style: normal;
+    line-height: 1.0;
+}
+ul,ol,li {list-style: none;}
+a {color: #000; text-decoration: none;}
+input,button {cursor: pointer; background: none; border: 0;}
