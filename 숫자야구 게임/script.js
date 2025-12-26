@@ -90,9 +90,18 @@ function check_numbers(){
     inputFieldList.forEach((el, idx) => {
         if (!/^[0-9]$/.test(el.value)) inputInvalid = true;
     });
+    const values = Array.from(inputFieldList).map(el => el.value);
 
     if (inputInvalid) {
         alert("입력이 잘못되었습니다. 0-9의 숫자만 입력해주세요.");
+        //입력창 초기화
+        inputFieldList.forEach((el) => {
+            el.value = ""
+        })
+        return;
+    }
+    if (new Set(values).size !== values.length) {
+        alert('중복된 숫자가 있습니다.');
         //입력창 초기화
         inputFieldList.forEach((el) => {
             el.value = ""
