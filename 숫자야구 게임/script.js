@@ -5,20 +5,19 @@ const game = {
 }
 
 const inputFieldList = document.querySelectorAll(".input-field");
-const submitBtn = document.getElementsByClassName("game-result").item(0);
+const submitBtn = document.querySelector(".submit-button");
 const gameResultImg = document.getElementById("game-result-img");
 const leftAttemptsSpan = document.getElementById("attempts");
 const checkResultDiv = document.querySelector(".check-result");
-
-let resultCnt = 1;
-let gameEnded = false;
+const resultDisplayDiv = document.querySelector(".result-display")
 
 function updateUI() {
     leftAttemptsSpan.textContent = String(game.maxAttempt - game.curAttempt);
 }
+let resultCnt = 1;
+let gameEnded = false;
 //초기화 함수
 function initialize(){
-    updateUI()
     //정답 생성 로직
     const digits = [];
 
@@ -29,10 +28,19 @@ function initialize(){
 
     game.answer = digits.join('');
 
-    //CSS 고치는 로직 -> #results에 justify-content 추가 
-    // resultsDiv.style.display = "flex"
-    // resultsDiv.style.flexFlow = "row"
-    // resultsDiv.style.justifyContent = "space-between"
+    //초기화
+    resultCnt = 1;
+    gameEnded = false;
+    game.curAttempt = 0;
+    
+    submitBtn.style.backgroundColor = '#ADD8E6';
+    submitBtn.textContent = "확인하기";
+
+    gameResultImg.src = ""
+    while (resultDisplayDiv.firstChild) {
+        resultDisplayDiv.removeChild(resultDisplayDiv.firstChild);
+    }
+    updateUI();
 }
 //새 결과 열을 만드는 함수
 function resultRowFactory(isOUT){
@@ -77,6 +85,7 @@ initialize();
 
 function check_numbers(){
     if(gameEnded){
+        initialize()
         return;
     }
     const guess = Array.from(inputFieldList)
@@ -135,18 +144,26 @@ function check_numbers(){
     if(strike === 3){
         //success 사진 띄우기
         gameResultImg.src = "success.png";
-        gameEnded = true;
+        onGameEnded();
     }
     if(game.maxAttempt - game.curAttempt === 0){
         gameResultImg.src = "fail.png";
-        gameEnded = true;
+        onGameEnded();
     }
     
-    updateUI()
+    updateUI();
+}
+
+function onGameEnded(){
+    // 초기화 버튼 생성
+    gameEnded=true;
+
+    submitBtn.style.backgroundColor = "Orange";
+    submitBtn.textContent = "초기화하기"
 }
 
 function appendResult(strike, ball, guessStr){
-    const parent = checkResultDiv.parentNode;
+    const parent = resultDisplayDiv;
     if(strike===0 && ball===0){
         const { row, left } = resultRowFactory(true);
         left.textContent = guessStr;
