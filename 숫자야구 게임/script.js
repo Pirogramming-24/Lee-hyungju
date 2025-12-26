@@ -5,11 +5,13 @@ const game = {
 }
 
 const inputFieldList = document.querySelectorAll(".input-field");
+const submitBtn = document.getElementsByClassName("game-result").item(0);
 const gameResultImg = document.getElementById("game-result-img");
 const leftAttemptsSpan = document.getElementById("attempts");
 const checkResultDiv = document.querySelector(".check-result");
 
 let resultCnt = 1;
+let gameEnded = false;
 
 function updateUI() {
     leftAttemptsSpan.textContent = String(game.maxAttempt - game.curAttempt);
@@ -74,14 +76,36 @@ function resultRowFactory(isOUT){
 initialize();
 
 function check_numbers(){
-    //판단 로직
-    let strike=0; 
-    let ball=0;
+    if(gameEnded){
+        return;
+    }
     const guess = Array.from(inputFieldList)
                             .map(input => input.value)
                             .join(' ')
     
+
+    //입력 유효성 로직
+    let inputInvalid = false;
+
+    inputFieldList.forEach((el, idx) => {
+        if (!/^[0-9]$/.test(el.value)) inputInvalid = true;
+    });
+
+    if (inputInvalid) {
+        alert("입력이 잘못되었습니다. 0-9의 숫자만 입력해주세요.");
+        //입력창 초기화
+        inputFieldList.forEach((el) => {
+            el.value = ""
+        })
+        return;
+    }
+
+    // 판단 로직
+    let strike=0; 
+    let ball=0;
+    
     inputFieldList.forEach((el,idx) => {
+        
         if(el.value === game.answer[idx]) strike+=1;
         else if(game.answer.includes(el.value)) ball++;
     });
@@ -101,10 +125,12 @@ function check_numbers(){
 
     if(strike === 3){
         //success 사진 띄우기
-        gameResultImg.src = "success.png"
+        gameResultImg.src = "success.png";
+        gameEnded = true;
     }
     if(game.maxAttempt - game.curAttempt === 0){
-        gameResultImg.src = "fail.png"
+        gameResultImg.src = "fail.png";
+        gameEnded = true;
     }
     
     updateUI()
