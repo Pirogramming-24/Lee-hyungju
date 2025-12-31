@@ -1,0 +1,285 @@
+.site-header{
+      background: #fff;
+      border-bottom: 1px solid #e9ecef;
+    }
+.brand{
+    text-decoration: none;
+    color: #111;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+}
+.brand:hover{ color:#111; }
+.brand .my{ color:#111; }
+.brand .movie{ color:#ff2d55; }  /* 스샷 느낌의 포인트 컬러 */
+.brand .reviews{ color:#111; font-weight: 700;}
+.brand span{
+    font-size: 30px;
+}
+.header-link{
+    text-decoration: none;
+    color:#555;
+    font-weight:600;
+}
+.header-link:hover{ color:#111; }
+
+.review-grid{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+}
+
+.review-card{
+  text-decoration: none;
+  color: #111;
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 16px;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.review-card:hover{
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+.review-thumb{
+  background: #dee2e6;
+  border-radius: 6px;
+  padding: 5px;
+  margin-bottom: 12px;
+}
+
+.review-thumb img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;    /* 비율 유지 + 넘치는 부분 크롭 */
+  display: block;
+}
+
+.review-title{
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.review-meta{
+  color: #666;
+  margin-bottom: 8px;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: start;
+  gap: 8px
+}
+.review-meta span{
+  font-size: 17px;
+}
+
+.meta-label{
+  margin-right: 5px;
+}
+
+.meta-value{
+  font-weight: 600;
+  color: #111;
+}
+
+.review-detail{
+  margin-top: 8px;
+}
+
+.detail-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.detail-title{
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 0;
+}
+
+.detail-actions{
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.action-link{
+  text-decoration: none;
+  color: #666;
+  font-weight: 600;
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+
+.action-link:hover{ color:#111; }
+
+.delete-form{ margin: 0; }
+
+.action-danger{ color:#666; } /* 사진처럼 빨간 강조 안 하고 싶으면 그대로 */
+.action-danger:hover{ color:#111; }
+
+.detail-top{
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 24px;
+  background: #f3f4f6;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.detail-thumb{
+  width: 180px;
+  height: 240px;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #e5e7eb;
+}
+
+.detail-thumb img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.thumb-placeholder{
+  width: 100%;
+  height: 100%;
+  background: #d9dde2;
+}
+
+.detail-info{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 8px;
+}
+
+.info-row{
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}
+
+.meta-label{
+  color: #666;
+  font-weight: 600;
+  min-width: 64px;  /* 라벨 폭 고정 */
+}
+
+.meta-value{
+  color: #111;
+  font-weight: 700;
+}
+
+.detail-content{
+  background: #f3f4f6;
+  border-radius: 10px;
+  padding: 18px 20px;
+}
+
+.content-text{
+  margin: 0;
+  line-height: 1.6;
+  color: #111;
+  white-space: pre-wrap; /* 줄바꿈 입력 그대로 */
+}
+
+.form-wrapper{
+  max-width: 520px;
+  margin: 0 auto;
+  background: #f3f4f6;
+  border-radius: 12px;
+  padding: 28px 32px;
+}
+
+.form-title{
+  text-align: center;
+  font-weight: 800;
+  margin-bottom: 16px;
+}
+
+.review-form{
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.form-row{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.form-row label{
+  min-width: 72px;
+  font-weight: 600;
+  color: #444;
+}
+
+.form-row select{
+  flex: 1;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 0.9rem;
+  background: #fff;
+}
+
+.form-row input,
+.form-row textarea{
+  flex: 1;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 0.9rem;
+}
+
+.textarea-row{
+  align-items: flex-start;
+}
+
+.textarea-row textarea{
+  min-height: 120px;
+  resize: vertical;
+}
+
+.form-actions{
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.submit-btn{
+  border: 1px solid #d1d5db;
+  background: #fff;
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.empty-message{
+  margin-top: 120px;
+  text-align: center;
+  color: #9ca3af;        /* 흐릿한 회색 */
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.sort-bar{
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+}
+
+.sort-bar select{
+  padding: 6px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
