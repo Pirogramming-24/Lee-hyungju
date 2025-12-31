@@ -5,7 +5,7 @@
 <form method="get" class="sort-bar">
   <select name="sort" onchange="this.form.submit()">
     <option value="">정렬 기준</option>
-    <option value="latest" {% if sort == "latest" %}selected{% endif %}>최신순</option>
+    <option value="latest" {% if sort == "latest" %}selected{% endif %}>최신개봉순</option>
     <option value="rating" {% if sort == "rating" %}selected{% endif %}>별점순</option>
     <option value="runtime" {% if sort == "runtime" %}selected{% endif %}>러닝타임순</option>
   </select>
