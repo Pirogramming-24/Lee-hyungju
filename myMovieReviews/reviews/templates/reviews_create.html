@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="form-wrapper">
+  <h2 class="form-title">Movie review 🍿 작성</h2>
+
+  <form action="{% url 'reviews:create' %}" method="post" class="review-form">
+    {% csrf_token %}
+
+    <div class="form-row">
+      <label>제목</label>
+      <input name="title" placeholder="영화 제목">
+    </div>
+
+    <div class="form-row">
+      <label>개봉년도</label>
+      <input name="releaseYear" placeholder="2025">
+    </div>
+
+    <div class="form-row">
+      <label>장르</label>
+      <select name="genre">
+        <option value="">선택</option>
+        {% for value, label in genre_choices %}
+          <option value="{{ value }}" {% if review.genre == value %}selected{% endif %}>
+            {{ label }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="form-row">
+      <label>별점</label>
+      <input name="rating" placeholder="4.5">
+    </div>
+
+    <div class="form-row">
+      <label>러닝타임</label>
+      <input name="runningTime" placeholder="148">
+    </div>
+
+    <div class="form-row">
+      <label>감독</label>
+      <input name="director" placeholder="감독 이름">
+    </div>
+
+    <div class="form-row">
+      <label>배우</label>
+      <input name="leadActor" placeholder="주연 배우">
+    </div>
+
+    <div class="form-row textarea-row">
+      <label>리뷰</label>
+      <textarea name="content" placeholder="리뷰 내용을 입력하세요"></textarea>
+    </div>
+
+    <div class="form-row">
+      <label>포스터</label>
+      <input name="imageURL" placeholder="이미지 주소(선택)">
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="submit-btn">작성</button>
+    </div>
+  </form>
+  
+</div>
+
+{% endblock %}
