@@ -1,0 +1,55 @@
+{% extends "main.html" %}
+{% load static %}
+{% block content %}
+
+<!-- TODO: CSS 적용하기 -->
+<div class="devtool-detail">
+
+  <!-- 제목 + 수정/삭제 -->
+  <div class="detail-header">
+    <div class="detail-actions">
+      <a class="action-link" href="{% url 'ideas:devtool_update' devtool.id %}">수정</a>
+      <form action="{% url 'ideas:devtool_delete' devtool.id %}" method="post" class="delete-form">
+        {% csrf_token %}
+        <button type="submit" class="action-link action-danger">삭제</button>
+      </form>
+      <a class="action-link" href="{% url 'ideas:devtool_list' %}">목록</a>
+    </div>
+  </div>
+
+  <!-- 상단 박스: 이미지 + 정보 -->
+  <section class="detail-top">
+    <div class="detail-info">
+      <div class="info-row">  
+        <span class="meta-label">이름</span>
+        <span class="meta-value">{{ devtool.name }}</span>
+      </div>
+      <div class="info-row">  
+        <span class="meta-label">분류</span>
+        <span class="meta-value">{{ devtool.kind }}</span>
+      </div>
+      <p class="content-text">{{ devtool.content }}</p>
+      <div class="info-row">
+        {% if idea_list%}
+        <span class="idea-list-title">> 만들 수 있는 SW 목록</span>
+        <div class="idea-list">
+            {% for idea in idea_list %}
+                <a href="{% url 'ideas:idea_detail' idea.id %}">{{ idea.title }}</a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <span class="empty-text">
+          이 개발도구로 등록된 아이디어가 없습니다.
+        </span>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  <!-- 내용 -->
+  <section class="detail-content">
+  </section>
+
+</div>
+
+{% endblock content %}

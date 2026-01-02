@@ -11,11 +11,14 @@ class DevTool(models.Model):
 
 class Idea(models.Model):
     title = models.CharField(max_length=32)
-    # TODO ImageField 더 설정하기
-    image = models.ImageField(blank=True, null=True)
+    image = models.ImageField(
+        upload_to="ideas/",
+        blank=True, 
+        null=True,
+    )
     content = models.TextField()
-    interest = models.IntegerField()
-    devTool = models.ForeignKey(
+    interest = models.IntegerField(default=0)
+    devtool = models.ForeignKey(
         DevTool,
         on_delete=models.CASCADE,
         related_name="ideas"

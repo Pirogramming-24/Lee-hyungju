@@ -1,0 +1,13 @@
+{% extends 'main.html' %}
+
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="form-section"> 
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button type="submit">저장</button>
+  </form>
+</div>
+
+{% endblock content %}

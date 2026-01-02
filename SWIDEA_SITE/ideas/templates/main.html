@@ -23,13 +23,22 @@
             <a class="brand" href="{% url 'ideas:ideas_list' %}">
                 <span class="my">my</span>
                 <span class="sw-idea">SW Idea</span>
-                <span class="Manage">Manage</span>
+                <span class="manage">Manage</span>
             </a>
 
             <!-- 오른쪽 링크 -->
             <div class="link-bar">
-                <a class="header-link" href="#">
+                <a class="header-link" href="{% url 'ideas:ideas_list' %}">
+                    아이디어 목록
+                </a>
+                <a class="header-link" href="{% url 'ideas:idea_create' %}">
                     아이디어 작성
+                </a>
+                <a class="header-link" href="{% url 'ideas:devtool_list' %}" >
+                    개발도구 목록
+                </a>
+                <a class="header-link" href="{% url 'ideas:devtool_create' %}" >
+                    개발도구 생성
                 </a>
             </div>
         </div>

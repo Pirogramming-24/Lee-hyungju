@@ -1,0 +1,53 @@
+{% extends "main.html" %}
+{% load static %}
+{% block content %}
+
+<div class="idea-detail">
+
+  <!-- 제목 + 수정/삭제 -->
+  <div class="detail-header">
+    <h2 class="detail-title">{{ idea.title }}</h2>
+
+    <div class="detail-actions">
+      <a class="action-link" href="{% url 'ideas:idea_update' idea.id %}">수정</a>
+      <form action="{% url 'ideas:idea_delete' idea.id %}" method="post" class="delete-form">
+        {% csrf_token %}
+        <button type="submit" class="action-link action-danger">삭제</button>
+      </form>
+      <a class="action-link" href="{% url 'ideas:ideas_list' %}">목록</a>
+      
+    </div>
+  </div>
+
+  <!-- 상단 박스: 이미지 + 정보 -->
+  <section class="detail-top">
+    <div class="detail-thumb">
+      {# 이미지 필드명은 본인 모델에 맞게 바꾸세요 #}
+      {% if idea.image %}
+        <img src="{{ idea.image.url }}" alt="{{ idea.title }}">
+      {% else %}
+        <div class="thumb-placeholder"></div>
+      {% endif %}
+    </div>
+
+    <div class="detail-info">
+      <div class="info-row">  
+        <span class="meta-label">관심도</span>
+        <span class="meta-value">{{ idea.interest }}</span>
+      </div>
+      <div class="info-row">  
+        <span class="meta-label">개발환경</span>
+        <a class="meta-value" href="{% url 'ideas:devtool_detail' idea.devtool.id %}" >{{ idea.devtool }}</a>
+      </div>
+      
+    </div>
+  </section>
+
+  <!-- 내용 -->
+  <section class="detail-content">
+    <p class="content-text">{{ idea.content }}</p>
+  </section>
+
+</div>
+
+{% endblock content %}
