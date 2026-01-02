@@ -13,6 +13,8 @@ urlpatterns = [
     path("idea/<int:pk>/", views.idea_detail, name="idea_detail"),
     path("idea/<int:pk>/update/", views.idea_update, name="idea_update"),
     path("idea/<int:pk>/delete/", views.idea_delete, name="idea_delete"),
+    path("idea/<int:pk>/star/", views.idea_star_toggle_api, name="idea_star_toggle_api"),
+    path("idea/<int:pk>/interest/", views.idea_interest_api, name="idea_interest_api"),
 
     path("devtool/", views.devtool_list, name="devtool_list"),
     path("devtool/create/", views.devtool_create, name="devtool_create"),

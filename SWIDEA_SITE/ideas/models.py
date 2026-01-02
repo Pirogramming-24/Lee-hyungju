@@ -24,3 +24,6 @@ class Idea(models.Model):
         related_name="ideas"
     )
 
+class IdeaStar(models.Model):
+    idea = models.OneToOneField("Idea", on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)

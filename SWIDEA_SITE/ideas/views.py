@@ -1,22 +1,36 @@
 from django.shortcuts import render, redirect
-from .models import Idea, DevTool
+from django.db.models import Exists, OuterRef
+from .models import Idea, DevTool, IdeaStar
 from .forms import IdeaForm, DevToolForm
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def ideas_list(request):
     sort = request.GET.get("sort","")
     ideas = Idea.objects.all()
+    starred_ids = set(
+        IdeaStar.objects.values_list("idea_id", flat=True)
+    )
 
     if sort == "interest":
         ideas = ideas.order_by("-interest")
     elif sort =="name":
-        ideas = ideas.order_by("-title")
+        ideas = ideas.order_by("title")
     elif sort =="createdAt":
         ideas = ideas.order_by("-id")
     elif sort =="starred":
-        ideas = ideas.order_by("-isstarred")
+        ideas = Idea.objects.annotate(
+            is_starred=Exists(
+                IdeaStar.objects.filter(idea=OuterRef("pk"))
+            )
+        ).order_by("-is_starred", "-id")
     context = {
         "ideas" : ideas,
+        "starred_ids": starred_ids,
+        "sort" : sort,
     }
     return render(request, "ideas_list.html", context)
 
@@ -60,7 +74,43 @@ def idea_delete(request, pk):
         idea.delete()
     return redirect("ideas:ideas_list")
 
+@require_POST
+def idea_star_toggle_api(request, pk):
+    idea = get_object_or_404(Idea, pk=pk)
 
+    star_qs = IdeaStar.objects.filter(idea=idea)
+    if star_qs.exists():
+        star_qs.delete()
+        starred = False
+    else:
+        IdeaStar.objects.create(idea=idea)
+        starred = True
+
+    star_count = IdeaStar.objects.filter(idea=idea).count()
+
+    return JsonResponse({
+        "ok": True,
+        "idea_id": idea.id,
+        "starred": starred,
+        "star_count": star_count,
+    })
+
+@require_POST
+def idea_interest_api(request, pk):
+    idea = get_object_or_404(Idea, pk=pk)
+    action = request.POST.get("action")
+
+    if action == "plus":
+        idea.interest += 1
+    elif action == "minus":
+        idea.interest = max(0, idea.interest - 1)  # 음수 방지
+
+    idea.save()
+
+    return JsonResponse({
+        "ok": True,
+        "interest": idea.interest,
+    })
 
 def devtool_list(request):
     devtools = DevTool.objects.all()

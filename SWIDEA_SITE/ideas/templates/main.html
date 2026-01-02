@@ -8,6 +8,7 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'reset.css' %}">
     <link rel="stylesheet" href="{% static 'style.css' %}">
+    <script src="{% static 'script.js' %}" defer></script>
     
     {% if title %}
         <title> My SW Idea Manage - {{ title }}</title>
@@ -16,6 +17,7 @@
     {% endif %}
 </head>
 <body>
+    <input type="hidden" id="csrf-token" value="{{ csrf_token }}">
     <header class="site-header">
         <nav class="navbar navbar-expand">
         <div class="container py-3 d-flex justify-content-between align-items-center">

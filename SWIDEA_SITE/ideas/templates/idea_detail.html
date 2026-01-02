@@ -2,52 +2,68 @@
 {% load static %}
 {% block content %}
 
-<div class="idea-detail">
+<div class="idea-detail-page">
+  <section class="idea-detail-card">
 
-  <!-- 제목 + 수정/삭제 -->
-  <div class="detail-header">
-    <h2 class="detail-title">{{ idea.title }}</h2>
+    <!-- 상단 타이틀 -->
+    <header class="idea-detail-header">
+      <h1 class="idea-detail-title">Idea Detail</h1>
+    </header>
 
-    <div class="detail-actions">
-      <a class="action-link" href="{% url 'ideas:idea_update' idea.id %}">수정</a>
-      <form action="{% url 'ideas:idea_delete' idea.id %}" method="post" class="delete-form">
+    <!-- 본문 박스(테두리) -->
+    <div class="idea-detail-body">
+      <div class="idea-detail-grid">
+
+        <!-- 좌측: 썸네일 -->
+        <div class="idea-detail-thumb">
+          {% if idea.image %}
+            <img src="{{ idea.image.url }}" alt="{{ idea.title }}">
+          {% else %}
+            <div class="idea-thumb-placeholder"></div>
+          {% endif %}
+        </div>
+
+        <!-- 우측: 정보 -->
+        <div class="idea-detail-info">
+          <h2 class="idea-title">{{ idea.title }}</h2>
+
+          <dl class="idea-meta">
+            <div class="meta-row">
+              <dt>관심도</dt>
+              <dd>{{ idea.interest }}</dd>
+            </div>
+
+            <div class="meta-row">
+              <dt>예상 개발 툴</dt>
+              <dd>
+                <a class="meta-link" href="{% url 'ideas:devtool_detail' idea.devtool.id %}">
+                  {{ idea.devtool }}
+                </a>
+              </dd>
+            </div>
+
+            <div class="meta-row meta-row--content">
+              <dt>아이디어 설명</dt>
+              <dd class="meta-content">{{ idea.content }}</dd>
+            </div>
+          </dl>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 하단 버튼 -->
+    <div class="idea-detail-actions">
+      <form action="{% url 'ideas:idea_delete' idea.id %}" method="post">
         {% csrf_token %}
-        <button type="submit" class="action-link action-danger">삭제</button>
+        <button type="submit" class="btn btn-danger">삭제</button>
       </form>
-      <a class="action-link" href="{% url 'ideas:ideas_list' %}">목록</a>
-      
-    </div>
-  </div>
 
-  <!-- 상단 박스: 이미지 + 정보 -->
-  <section class="detail-top">
-    <div class="detail-thumb">
-      {# 이미지 필드명은 본인 모델에 맞게 바꾸세요 #}
-      {% if idea.image %}
-        <img src="{{ idea.image.url }}" alt="{{ idea.title }}">
-      {% else %}
-        <div class="thumb-placeholder"></div>
-      {% endif %}
+      <a class="btn btn-ghost" href="{% url 'ideas:ideas_list' %}">목록</a>
+      <a class="btn btn-primary" href="{% url 'ideas:idea_update' idea.id %}">수정</a>
     </div>
 
-    <div class="detail-info">
-      <div class="info-row">  
-        <span class="meta-label">관심도</span>
-        <span class="meta-value">{{ idea.interest }}</span>
-      </div>
-      <div class="info-row">  
-        <span class="meta-label">개발환경</span>
-        <a class="meta-value" href="{% url 'ideas:devtool_detail' idea.devtool.id %}" >{{ idea.devtool }}</a>
-      </div>
-      
-    </div>
   </section>
-
-  <!-- 내용 -->
-  <section class="detail-content">
-    <p class="content-text">{{ idea.content }}</p>
-  </section>
-
 </div>
 
 {% endblock content %}

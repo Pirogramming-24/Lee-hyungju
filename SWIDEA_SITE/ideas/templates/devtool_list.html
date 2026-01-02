@@ -1,39 +1,21 @@
 {% extends "main.html" %}
-{% load static %}
 {% block content %}
 
-<!-- <form method="get" class="sort-bar">
-  <select name="sort" onchange="this.form.submit()">
-    <option value="">정렬 기준</option>
-    <option value="latest" {% if sort == "latest" %}selected{% endif %}>최신개봉순</option>
-    <option value="rating" {% if sort == "rating" %}selected{% endif %}>별점순</option>
-    <option value="runtime" {% if sort == "runtime" %}selected{% endif %}>러닝타임순</option>
-  </select>
-</form> -->
-
-<!-- TODO: devtool 형식에 맞게 HTML/CSS 조정 -->
 {% if devtools %}
-<div class="idea-grid">
-    {% for devtool in devtools %}
-    <a href="{% url 'ideas:devtool_detail' devtool.id %}" class="idea-card">
-        <div class="idea-body">
-            <h5 class="idea-title">{{ devtool.name }}</h5>
-            <div class="idea-meta">
-                <dl class="meta-label">분류</dl>
-                <dt class="meta-value">{{ devtool.kind }}</dt>
-            </div>
-            <div class="idea-meta">
-                <dl class="meta-label">관심도</dl>
-                <dt class="meta-value">{{ devtool.content }}</dt>
-            </div>
+  <div class="tool-list">
+    {% for tool in devtools %}
+      <a class="tool-card" href="{% url 'ideas:devtool_detail' tool.pk %}">
+        <div class="tool-head">
+          <h3 class="tool-name">{{ tool.name }}</h3>
+          <span class="tool-kind">{{ tool.kind }}</span>
         </div>
-    </a>
+
+        <p class="tool-desc">{{ tool.content }}</p>
+      </a>
     {% endfor %}
-</div>
+  </div>
 {% else %}
-    <div class="empty-message">
-        등록된 아이디어가 없습니다.
-    </div>
+  <div class="empty-message">등록된 개발툴이 없습니다.</div>
 {% endif %}
 
-{% endblock content %}
+{% endblock %}
