@@ -1,0 +1,41 @@
+{% extends "main.html" %}
+{% load static %}
+{% block content %}
+
+<!-- <form method="get" class="sort-bar">
+  <select name="sort" onchange="this.form.submit()">
+    <option value="">정렬 기준</option>
+    <option value="latest" {% if sort == "latest" %}selected{% endif %}>최신개봉순</option>
+    <option value="rating" {% if sort == "rating" %}selected{% endif %}>별점순</option>
+    <option value="runtime" {% if sort == "runtime" %}selected{% endif %}>러닝타임순</option>
+  </select>
+</form> -->
+
+{% if ideas %}
+<div class="idea-grid">
+    {% for idea in ideas %}
+    <a href="{% url 'ideas:idea_detail' idea.id %}" class="idea-card">
+        <div class="idea-thumb">
+            <!-- <img src="{{ idea.image }}" alt=""> -->
+        </div>
+        <div class="idea-body">
+            <h5 class="idea-title">{{ idea.title }}</h5>
+            <div class="idea-meta">
+                <dl class="meta-label">예상 개발 툴</dl>
+                <dt class="meta-value">{{ idea.devTool }}</dt>
+            </div>
+            <div class="idea-meta">
+                <dl class="meta-label">아이디어 관심도</dl>
+                <dt class="meta-value">{{ idea.interest }}</dt>
+            </div>
+        </div>
+    <!-- </a> -->
+    {% endfor %}
+</div>
+{% else %}
+    <div class="empty-message">
+        등록된 아이디어가 없습니다.
+    </div>
+{% endif %}
+
+{% endblock content %}
