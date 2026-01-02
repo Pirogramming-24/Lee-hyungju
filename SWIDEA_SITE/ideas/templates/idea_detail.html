@@ -16,6 +16,27 @@
 
         <!-- 좌측: 썸네일 -->
         <div class="idea-detail-thumb">
+          <button
+            type="button"
+            class="star-btn {% if idea.id in starred_ids %}is-filled{% else %}is-empty{% endif %}"
+            data-url="{% url 'ideas:idea_star_toggle_api' idea.pk %}"
+          >
+            <span class="star-icon">
+              {% if idea.id in starred_ids %}
+                <!-- 채워진 별 SVG -->
+                <svg viewBox="0 0 24 24" width="18" height="18">
+                  <path fill="currentColor" d="M12 17.3l-6.18 3.73 1.64-7.03L2 9.24l7.19-.61L12 2l2.81 6.63 7.19.61-5.46 4.76 1.64 7.03z"/>
+                </svg>
+              {% else %}
+                <!-- 빈 별 SVG -->
+                <svg viewBox="0 0 24 24" width="18" height="18">
+                <path fill="none" stroke="currentColor" stroke-width="2"
+                  d="M12 2l2.81 6.63 7.19.61-5.46 4.76 1.64 7.03L12 17.3l-6.18 3.73 1.64-7.03L2 9.24l7.19-.61z"/>
+                </svg>
+              {% endif %}
+            </span>
+          </button>
+
           {% if idea.image %}
             <img src="{{ idea.image.url }}" alt="{{ idea.title }}">
           {% else %}

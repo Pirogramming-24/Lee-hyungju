@@ -257,6 +257,7 @@ span.asteriskField{ color: gold; }
   justify-content:center;
   align-items:center;
   min-height: 240px;
+  position: relative;
 }
 
 .idea-detail-thumb img{

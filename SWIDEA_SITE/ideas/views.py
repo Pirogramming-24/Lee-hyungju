@@ -36,8 +36,12 @@ def ideas_list(request):
 
 def idea_detail(request, pk):
     idea = Idea.objects.get(id=pk)
+    starred_ids = set(
+        IdeaStar.objects.values_list("idea_id", flat=True)
+    )
     context = {
         "idea" : idea,
+        "starred_ids": starred_ids,
     }
     return render(request, "idea_detail.html", context)
 
