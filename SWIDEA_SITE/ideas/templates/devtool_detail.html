@@ -1,0 +1,71 @@
+{% extends "main.html" %}
+{% load static %}
+{% block content %}
+
+<div class="idea-detail-page">
+  <section class="idea-detail-card">
+
+    <!-- 상단 타이틀 -->
+    <header class="idea-detail-header">
+      <h1 class="idea-detail-title">DevTool Detail</h1>
+      <!-- <p class="idea-detail-sub">
+        개발도구 정보와, 해당 개발도구로 등록된 아이디어 목록을 확인하세요.
+      </p> -->
+    </header>
+
+    <!-- 내부 테두리 박스 -->
+    <div class="idea-detail-body">
+      <div class="devtool-detail-grid">
+
+        <!-- 좌측: 기본 정보 -->
+        <div class="devtool-info">
+          <h2 class="idea-title">{{ devtool.name }}</h2>
+
+          <dl class="idea-meta">
+            <div class="meta-row">
+              <dt>분류</dt>
+              <dd>{{ devtool.kind }}</dd>
+            </div>
+
+            <div class="meta-row meta-row--content">
+              <dt>설명</dt>
+              <dd class="meta-content">{{ devtool.content }}</dd>
+            </div>
+          </dl>
+        </div>
+
+        <!-- 우측: 관련 아이디어 목록 -->
+        <aside class="devtool-ideas">
+          <h3 class="side-title">만들 수 있는 SW 목록</h3>
+
+          {% if idea_list %}
+            <div class="idea-link-list">
+              {% for idea in idea_list %}
+                <a class="idea-link-item" href="{% url 'ideas:idea_detail' idea.id %}">
+                  {{ idea.title }}
+                </a>
+              {% endfor %}
+            </div>
+          {% else %}
+            <p class="empty-text">이 개발도구로 등록된 아이디어가 없습니다.</p>
+          {% endif %}
+        </aside>
+
+      </div>
+    </div>
+
+    <!-- 하단 버튼 -->
+    <div class="idea-detail-actions">
+      <form action="{% url 'ideas:devtool_delete' devtool.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">삭제</button>
+      </form>
+
+      <a class="btn btn-ghost" href="{% url 'ideas:devtool_list' %}">목록</a>
+      <a class="btn btn-primary" href="{% url 'ideas:devtool_update' devtool.id %}">수정</a>
+    </div>
+
+  </section>
+</div>
+
+{% endblock content %}

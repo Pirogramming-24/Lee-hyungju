@@ -1,0 +1,85 @@
+{% extends "main.html" %}
+{% load static %}
+{% block content %}
+
+<form method="get" class="sort-bar">
+  <select name="sort" onchange="this.form.submit()">
+    <option value="">정렬 기준</option>
+    <option value="interest" {% if sort == "interest" %}selected{% endif %}>관심도순</option>
+    <option value="name" {% if sort == "name" %}selected{% endif %}>이름순</option>
+    <option value="createdAt" {% if sort == "createdAt" %}selected{% endif %}>등록순</option>
+    <option value="starred" {% if sort == "starred" %}selected{% endif %}>찜 여부 순</option>
+  </select>
+</form>
+
+{% if ideas %}
+<div class="idea-grid">
+  {% for idea in ideas %}
+  <div class="idea-card">
+    <div class="card-top">
+      <button
+        type="button"
+        class="star-btn {% if idea.id in starred_ids %}is-filled{% else %}is-empty{% endif %}"
+        data-url="{% url 'ideas:idea_star_toggle_api' idea.pk %}"
+      >
+        <span class="star-icon">
+          {% if idea.id in starred_ids %}
+            <!-- 채워진 별 SVG -->
+            <svg viewBox="0 0 24 24" width="18" height="18">
+              <path fill="currentColor" d="M12 17.3l-6.18 3.73 1.64-7.03L2 9.24l7.19-.61L12 2l2.81 6.63 7.19.61-5.46 4.76 1.64 7.03z"/>
+            </svg>
+          {% else %}
+            <!-- 빈 별 SVG -->
+            <svg viewBox="0 0 24 24" width="18" height="18">
+            <path fill="none" stroke="currentColor" stroke-width="2"
+              d="M12 2l2.81 6.63 7.19.61-5.46 4.76 1.64 7.03L12 17.3l-6.18 3.73 1.64-7.03L2 9.24l7.19-.61z"/>
+            </svg>
+          {% endif %}
+        </span>
+      </button>
+
+
+    </div>
+    <a href="{% url 'ideas:idea_detail' idea.id %}">
+      <div class="idea-thumb">
+          {% if idea.image %}
+              <img src="{{ idea.image.url }}" alt="{{ idea.title }}">
+          {% else %}
+              <div class="thumb-placeholder"></div>
+          {% endif %}
+      </div>
+      <div class="idea-body">
+          <h5 class="idea-title">{{ idea.title }}</h5>
+          <div class="idea-meta">
+              <span class="meta-value">{{ idea.devtool }}</span>
+          </div>
+      </div>
+    </a>
+    <div class="interest-box">
+      <dl class="meta-label">관심도</dl>
+      <button
+        type="button"
+        class="interest-btn"
+        data-action="minus"
+        data-url="{% url 'ideas:idea_interest_api' idea.pk %}"
+      >-</button>
+
+      <span class="interest-value">{{ idea.interest }}</span>
+
+      <button
+        type="button"
+        class="interest-btn"
+        data-action="plus"
+        data-url="{% url 'ideas:idea_interest_api' idea.pk %}"
+      >+</button>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+    <div class="empty-message">
+        등록된 아이디어가 없습니다.
+    </div>
+{% endif %}
+
+{% endblock content %}

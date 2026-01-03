@@ -1,0 +1,21 @@
+{% extends "main.html" %}
+{% block content %}
+
+{% if devtools %}
+  <div class="tool-list">
+    {% for tool in devtools %}
+      <a class="tool-card" href="{% url 'ideas:devtool_detail' tool.pk %}">
+        <div class="tool-head">
+          <h3 class="tool-name">{{ tool.name }}</h3>
+          <span class="tool-kind">{{ tool.kind }}</span>
+        </div>
+
+        <p class="tool-desc">{{ tool.content }}</p>
+      </a>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="empty-message">등록된 개발툴이 없습니다.</div>
+{% endif %}
+
+{% endblock %}

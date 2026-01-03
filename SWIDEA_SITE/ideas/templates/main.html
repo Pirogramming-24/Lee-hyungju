@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'reset.css' %}">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <script src="{% static 'script.js' %}" defer></script>
+    
+    {% if title %}
+        <title> My SW Idea Manage - {{ title }}</title>
+    {% else %}
+        <title> My SW Idea Manage </title>
+    {% endif %}
+</head>
+<body>
+    <input type="hidden" id="csrf-token" value="{{ csrf_token }}">
+    <header class="site-header">
+        <nav class="navbar navbar-expand">
+        <div class="container py-3 d-flex justify-content-between align-items-center">
+            <!-- 왼쪽 로고 -->
+            <a class="brand" href="{% url 'ideas:ideas_list' %}">
+                <span class="my">my</span>
+                <span class="sw-idea">SW Idea</span>
+                <span class="manage">Manage</span>
+            </a>
+
+            <!-- 오른쪽 링크 -->
+            <div class="link-bar">
+                <a class="header-link" href="{% url 'ideas:ideas_list' %}">
+                    아이디어 목록
+                </a>
+                <a class="header-link" href="{% url 'ideas:idea_create' %}">
+                    아이디어 작성
+                </a>
+                <a class="header-link" href="{% url 'ideas:devtool_list' %}" >
+                    개발도구 목록
+                </a>
+                <a class="header-link" href="{% url 'ideas:devtool_create' %}" >
+                    개발도구 생성
+                </a>
+            </div>
+        </div>
+        </nav>
+    </header>
+    <div class='container py-4'>
+        {% block content %}{% endblock %}
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
+</body>
+</html>

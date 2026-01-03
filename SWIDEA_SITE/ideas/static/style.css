@@ -1,0 +1,577 @@
+/* =========================
+   Base
+========================= */
+:root{
+  --bg: #222;
+
+  /* 카드 톤(idea-card 기준) */
+  --card-bg: #424f5c;
+  --card-radius: 8px;
+
+  /* 텍스트 */
+  --text: #fff;
+  --muted: #ccc;
+
+  /* 공통 라인/버튼 */
+  --line: rgba(255,255,255,0.22);
+
+  /* 디테일 카드 톤(배경 위 반투명) */
+  /* --detail-card-bg: rgba(120,120,120,0.55); */
+  --detail-card-radius: 16px;
+}
+
+body{ background-color: var(--bg); }
+
+h1, h2, h3, h4, h5, h6, a, p, span, button, label { color: var(--text); }
+
+span.asteriskField{ color: gold; }
+
+/* =========================
+   Header
+========================= */
+.site-header{
+  background: #ffffff00;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.brand{
+  text-decoration: none;
+  color: var(--text);
+  font-weight: 800;
+  letter-spacing: -0.3px;
+}
+.brand:hover{ color: var(--text); }
+.brand .my{ color: var(--text); }
+.brand .sw-idea{ color: #aeff2d; }
+.brand .manage{ color: var(--text); font-weight: 700; }
+.brand span{ font-size: 30px; }
+
+.link-bar{
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 20px;
+}
+.header-link{
+  text-decoration: none;
+  color: var(--text);
+  font-weight:600;
+}
+.header-link:hover{ color:#bbb; }
+
+/* =========================
+   Idea List
+========================= */
+.idea-grid{
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+}
+
+.idea-card{
+  text-decoration: none;
+  color: var(--text);
+  background: var(--card-bg);
+  border-radius: var(--card-radius);
+  padding: 16px 16px 40px 16px;
+  transition: transform .15s ease, box-shadow .15s ease;
+  position: relative;
+  overflow: visible;
+}
+
+.idea-card:hover{
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+.card-link{
+  position: relative;
+  z-index: 1;
+}
+
+/* 별 버튼 */
+.star-btn{
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 20;
+
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: rgba(0,0,0,0.55);
+
+  border: none;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.star-svg{
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.star-btn.is-empty{ color: #000; }
+
+.star-btn.is-filled svg{
+  color: #f5c518;
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+/* 관심도 박스(카드 위) */
+.star-btn,
+.interest-box{
+  position: absolute;
+  z-index: 10;
+}
+
+.interest-box{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.interest-btn{
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+/* 썸네일 */
+.idea-thumb{
+  background: #dee2e6;
+  border-radius: 6px;
+  padding: 5px;
+  margin-bottom: 12px;
+}
+
+.idea-thumb img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.idea-title{
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--text);
+}
+
+.idea-meta{
+  color: var(--muted);
+  margin-bottom: 8px;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: start;
+  gap: 8px;
+}
+.idea-meta span{ font-size: 17px; }
+
+.meta-label{ margin-right: 5px; }
+
+.meta-value{
+  margin: 8px 0;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.empty-message{
+  margin-top: 120px;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+/* =========================
+   Detail (Idea Detail / Update 공통)
+   - main.html 배경 위에 중앙 카드 1장
+========================= */
+.idea-detail-page{
+  min-height: calc(100vh - 80px);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding: 40px 16px;
+}
+
+.idea-detail-card{
+  width: min(980px, 100%);
+  border-radius: var(--detail-card-radius);
+  background: var(--card-bg);
+  backdrop-filter: blur(2px);
+  padding: 28px 28px 22px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+}
+
+/* 상단 타이틀 */
+.idea-detail-header{
+  text-align:center;
+  margin-bottom: 14px;
+}
+
+.idea-detail-title{
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: .3px;
+}
+
+.idea-detail-sub{
+  margin: 6px 0 0;
+  font-size: 12px;
+  opacity: .9;
+}
+
+/* 내부 테두리 박스 */
+.idea-detail-body{
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 14px;
+  padding: 22px;
+}
+
+/* 2열 레이아웃 */
+.idea-detail-grid{
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 22px;
+  align-items: start;
+}
+
+/* 디테일 썸네일 */
+.idea-detail-thumb{
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(0,0,0,0.18);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height: 240px;
+  position: relative;
+}
+
+.idea-detail-thumb img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display:block;
+}
+
+.idea-thumb-placeholder{
+  width: 100%;
+  height: 240px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 14px;
+}
+
+/* 디테일 정보 영역 */
+.idea-detail-info .idea-title{
+  margin: 0 0 12px;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+/* 상세 메타(라벨/값 정렬) */
+.idea-meta{
+  margin:0;
+}
+
+.idea-meta .meta-row{
+  display:grid;
+  grid-template-columns: 110px 1fr;
+  gap: 12px;
+  align-items: start;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.idea-meta .meta-row dt{
+  opacity: .9;
+  font-weight: 700;
+}
+
+.idea-meta .meta-row dd{
+  margin:0;
+}
+
+.meta-link{
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255,255,255,0.35);
+}
+
+/* 본문(내용) */
+.meta-content{
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+/* 하단 버튼 */
+.idea-detail-actions{
+  margin-top: 14px;
+  display:flex;
+  gap: 10px;
+  justify-content:center;
+}
+
+.btn{
+  border: none;
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  text-decoration:none;
+}
+
+.btn-danger{ background: #d9534f; color:#fff; }
+.btn-primary{ background: #4da3ff; color:#fff; }
+.btn-ghost{
+  background: rgba(255,255,255,0.18);
+  color:#fff;
+  border:1px solid rgba(255,255,255,0.22);
+}
+
+/* 기존 detail-header/detail-actions 쓰는 템플릿 호환(남겨둠) */
+.detail-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.detail-title{
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 0;
+}
+.detail-actions{
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* =========================
+   DevTool List (1열 카드)
+========================= */
+.tool-list{
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-width: 860px;
+  margin: 30px auto;
+  padding: 0 16px;
+}
+
+/* idea-card와 같은 톤 */
+.tool-card{
+  display: block;
+  text-decoration: none;
+  color: inherit;
+
+  background: var(--card-bg);
+  border-radius: var(--card-radius);
+  padding: 18px 20px;
+}
+
+.tool-card:hover{ filter: brightness(1.05); }
+
+.tool-head{
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.tool-name{
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.tool-kind{
+  font-size: 14px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.25);
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.tool-desc{
+  margin: 0;
+  line-height: 1.55;
+  color: rgba(255,255,255,0.9);
+  font-size: 16px;
+  overflow: hidden;
+}
+
+/* =========================
+   Responsive
+========================= */
+@media (max-width: 1024px){
+  .idea-grid{ grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px){
+  .idea-grid{ grid-template-columns: 1fr; }
+
+  .idea-detail-card{ padding: 20px; }
+  .idea-detail-body{ padding: 16px; }
+  .idea-detail-grid{ grid-template-columns: 1fr; }
+
+  .idea-meta .meta-row{ grid-template-columns: 90px 1fr; }
+}
+
+/* devtool detail: 2열(좌 정보 / 우 목록) */
+.devtool-detail-grid{
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 22px;
+  align-items: start;
+}
+
+/* 오른쪽 사이드 */
+.devtool-ideas{
+  border-left: 1px solid rgba(255,255,255,0.18);
+  padding-left: 18px;
+}
+
+.side-title{
+  margin: 0 0 10px;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+/* 링크 리스트 */
+.idea-link-list{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.idea-link-item{
+  text-decoration: none;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.14);
+}
+
+.idea-link-item:hover{
+  filter: brightness(1.07);
+}
+
+.empty-text{
+  margin: 0;
+  color: rgba(255,255,255,0.75);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* 모바일 1열 */
+@media (max-width: 768px){
+  .devtool-detail-grid{
+    grid-template-columns: 1fr;
+  }
+  .devtool-ideas{
+    border-left: none;
+    padding-left: 0;
+    border-top: 1px solid rgba(255,255,255,0.18);
+    padding-top: 14px;
+    margin-top: 6px;
+  }
+}
+
+.form-group{
+  padding: 10px 0;
+}
+
+/* 중앙 카드 */
+.form-page{
+  min-height: calc(100vh - 80px);
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  padding: 40px 16px;
+}
+
+.form-card{
+  width: min(980px, 100%);
+  border-radius: 16px;
+  background: rgba(120,120,120,0.55);
+  backdrop-filter: blur(2px);
+  padding: 24px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.15);
+}
+
+/* 라벨 */
+.form-card label{
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+/* Bootstrap4 폼 컨트롤 다크화 */
+.form-card .form-control,
+.form-card select.form-control,
+.form-card textarea.form-control{
+  background: rgba(0,0,0,0.28);
+  border: 1px solid rgba(255,255,255,0.22);
+  color: #fff;
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+
+.form-card .form-control:focus{
+  background: rgba(0,0,0,0.28);
+  color: #fff;
+  border-color: rgba(174,255,45,0.75);
+  box-shadow: 0 0 0 0.2rem rgba(174,255,45,0.12);
+}
+
+/* textarea 크기 */
+.form-card textarea.form-control{
+  min-height: 260px;
+  resize: vertical;
+}
+
+/* file input (BS4 커스텀/기본 둘 다 대응) */
+.form-card input[type="file"]{
+  padding: 10px;
+  background: rgba(0,0,0,0.18);
+  border-radius: 12px;
+  border: 1px dashed rgba(255,255,255,0.25);
+  color: #fff;
+}
+
+/* help/error 텍스트 */
+.form-card .help-block,
+.form-card .form-text,
+.form-card .invalid-feedback{
+  color: rgba(255,255,255,0.7);
+  font-size: 12px;
+}
+
+.form-card .invalid-feedback{
+  color: #ffb4b4;
+}
+
+/* 버튼 줄 */
+.form-actions{
+  margin-top: 14px;
+  display:flex;
+  gap: 10px;
+}
