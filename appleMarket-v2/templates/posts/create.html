@@ -1,17 +1,21 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block head %}
 <title>post_create</title>
 <style>
-    main {
-        height: 100vh;
-    }
+  main { height: 100vh; }
+  #ocr_status { margin-bottom: 8px; font-size: 14px; font-weight: 700;}
 </style>
 {% endblock %}
 
 {% block content %}
-<form action="{% url 'posts:create' %}" method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button class="btn btn-success">등록하기</button>
+<form id="postForm" action="{% url 'posts:create' %}" method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <div id="ocr_status"></div>
+  <button class="btn btn-success">등록하기</button>
 </form>
+
+<script src="{% static 'posts/js/nutrition_ocr.js' %}"></script>
 {% endblock %}

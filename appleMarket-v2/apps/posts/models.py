@@ -14,11 +14,11 @@ class Post(models.Model):
     photo = models.ImageField('이미지', blank=True, upload_to='posts/%Y%m%d')
 
     # 영양정보
-    nutrition_facts_photo = models.ImageField('영양성분 이미지', blank=True, null=True, upload_to='posts/nutrition_facts/%Y%m%d')
-    calorie = models.IntegerField('칼로리(Kcal)', blank=True, null=True, default=0)
-    carbonhydrate = models.FloatField('탄수화물(g)', blank=True, null=True, default=0)
-    protein = models.FloatField('단백질(g)', blank=True, null=True, default=0)
-    fat = models.FloatField('지방(g)', blank=True, null=True, default=0)
+    nutrition_image = models.ImageField('영양성분 이미지', blank=True, null=True, upload_to='posts/nutrition_facts/%Y%m%d')
+    kcal = models.IntegerField('칼로리(Kcal)', blank=True, null=True, default=0)
+    carb_g = models.FloatField('탄수화물(g)', blank=True, null=True, default=0)
+    protein_g = models.FloatField('단백질(g)', blank=True, null=True, default=0)
+    fat_g = models.FloatField('지방(g)', blank=True, null=True, default=0)
 
     def save(self, *args, **kwargs):
         if self.pk:  # 수정일 때에만 갱신
@@ -26,23 +26,8 @@ class Post(models.Model):
         super().save(*args, **kwargs)
 
 class NutritionOCRJob(models.Model):
-    STATUS_PENDING = "PENDING"
-    STATUS_RUNNING = "RUNNING"
-    STATUS_SUCCESS = "SUCCESS"
-    STATUS_FAIL = "FAIL"
-
-    STATUS_CHOICES = [
-        (STATUS_PENDING, "Pending"),
-        (STATUS_RUNNING, "Running"),
-        (STATUS_SUCCESS, "Success"),
-        (STATUS_FAIL, "Fail"),
-    ]
-
+    status = models.CharField(max_length=10, default="PENDING")  # PENDING/RUNNING/SUCCESS/FAIL
     image = models.ImageField(upload_to="nutrition_ocr/")
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default=STATUS_PENDING)
-
-    result = models.JSONField(null=True, blank=True)  # {"kcal":..., "carb_g":..., ...}
+    result = models.JSONField(null=True, blank=True)
     error = models.TextField(null=True, blank=True)
-
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
