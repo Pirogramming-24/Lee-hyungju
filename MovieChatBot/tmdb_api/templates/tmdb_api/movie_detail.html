@@ -3,31 +3,61 @@
 {% block title %}{{ movie.title }}{% endblock %}
 
 {% block content %}
-<h2>{{ movie.title }}</h2>
+<h2 class="movie-header">{{ movie.title }}</h2>
 
-{% if movie.poster_img %}
-  <img src="{{ movie.poster_img.url }}">
-{% elif movie.poster_path %}
-  <img src="{{ movie.poster_path }}">
-{% endif %}
+<div class="movie-detail-card">
+  <div class="movie-detail-top">
+    <div class="movie-detail-poster">
+      {% if movie.poster_img %}
+        <img src="{{ movie.poster_img.url }}" alt="{{ movie.title }}">
+      {% elif movie.poster_url %}
+        <img src="{{ movie.poster_url }}" alt="{{ movie.title }}">
+      {% else %}
+        <div class="poster-placeholder"></div>
+      {% endif %}
+    </div>
 
-<p><b>개봉일:</b> {{ movie.release_date }}</p>
-<p><b>감독:</b> {{ movie.director|default:"(없음)" }}</p>
-<p><b>주연:</b> {{ movie.leadActor|default:"(없음)" }}</p>
-<p><b>러닝타임:</b> {{ movie.runningTime|default:"(없음)" }}분</p>
-<p><b>장르:</b> {{ movie.genre_display|default:"(없음)" }}</p>
-<!-- <hr> -->
-<!-- <h4>DEBUG: TMDB genres raw</h4> -->
-<!-- <pre>{{ movie.genres }}</pre> -->
+    <div class="movie-detail-info">
+      <h2 class="movie-detail-title">{{ movie.title }}</h2>
 
+      <dl class="movie-detail-meta">
+        <div>
+          <dt>개봉일</dt>
+          <dd>{{ movie.release_date }}</dd>
+        </div>
+        <div>
+          <dt>감독</dt>
+          <dd>{{ movie.director|default:"(없음)" }}</dd>
+        </div>
+        <div>
+          <dt>주연</dt>
+          <dd>{{ movie.leadActor|default:"(없음)" }}</dd>
+        </div>
+        <div>
+          <dt>러닝타임</dt>
+          <dd>{{ movie.runningTime|default:"(없음)" }}분</dd>
+        </div>
+        <div>
+          <dt>장르</dt>
+          <dd>{{ movie.genre_display|default:"(없음)" }}</dd>
+        </div>
+      </dl>
+      <hr>
 
-<hr>
+      <div class="movie-detail-actions">
+        <a href="{% url 'reviews:create' %}?tmdb_id={{ movie.tmdb_id }}"
+           class="submit-btn">
+          리뷰 작성
+        </a>
+      </div>
+    </div>
+  </div>
 
-<p>{{ movie.overview }}</p>
+  <h4>DEBUG</h4>
+  <div class="movie-detail-overview">
+    <h4>줄거리</h4>
+    <p>{{ movie.overview }}</p>
+  </div>
+</div>
 
-<hr>
-
-<a href="{% url 'reviews:create' %}?tmdb_id={{ movie_obj.tmdb_id }}">
-    리뷰 작성
-</a>
 {% endblock %}

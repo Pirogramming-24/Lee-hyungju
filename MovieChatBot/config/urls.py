@@ -22,7 +22,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("reviews.urls")),
-    path("", include("tmdb_api.urls"))
+    path("", include("tmdb_api.urls")),
+    path("chat/", include("chatbot.urls")),
 ]
 
 if settings.DEBUG:

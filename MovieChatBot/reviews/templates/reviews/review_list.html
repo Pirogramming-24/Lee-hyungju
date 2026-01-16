@@ -2,24 +2,37 @@
 {% load static %}
 {% block content %}
 
-<form method="GET" action="{% url 'reviews:review_list' %}">
-  <input type="text" name="q" value="{{ q }}" placeholder="리뷰/영화 검색">
+<div class="sort-bar">
+  <form method="GET" action="{% url 'reviews:review_list' %}">
+    <input
+      type="text"
+      name="q"
+      value="{{ q }}"
+      placeholder="리뷰 / 영화 검색"
+    >
 
-  <select name="sort">
-    <option value="recent" {% if sort == "recent" %}selected{% endif %}>최신</option>
-    <option value="title" {% if sort == "title" %}selected{% endif %}>제목순</option>
-    <option value="rating" {% if sort == "rating" %}selected{% endif %}>별점순</option>
-    <option value="year" {% if sort == "year" %}selected{% endif %}>최신년도순</option>
-  </select>
+    <select name="sort">
+      <option value="recent" {% if sort == "recent" %}selected{% endif %}>최신</option>
+      <option value="title" {% if sort == "title" %}selected{% endif %}>제목순</option>
+      <option value="rating" {% if sort == "rating" %}selected{% endif %}>별점순</option>
+      <option value="year" {% if sort == "year" %}selected{% endif %}>최신년도순</option>
+    </select>
 
-  <select name="source">
-    <option value="all" {% if source == "all" %}selected{% endif %}>전체</option>
-    <option value="tmdb" {% if source == "tmdb" %}selected{% endif %}>TMDB</option>
-    <option value="manual" {% if source == "manual" %}selected{% endif %}>직접 추가</option>
-  </select>
+    <select name="source">
+      <option value="all" {% if source == "all" %}selected{% endif %}>전체</option>
+      <option value="tmdb" {% if source == "tmdb" %}selected{% endif %}>TMDB</option>
+      <option value="manual" {% if source == "manual" %}selected{% endif %}>직접 추가</option>
+    </select>
 
-  <button type="submit">적용</button>
-</form>
+    <button type="submit">적용</button>
+  </form>
+</div>
+
+<div class="form-actions">
+    <a href="{% url 'reviews:create_search' %}" class="search-btn">
+        TMDB로 영화 검색해서 리뷰 작성
+    </a>
+</div>
 
 
 {% if reviews %}
@@ -50,6 +63,11 @@
 {% else %}
     <div class="empty-message">
         등록된 리뷰가 없습니다.
+        <div class="form-actions">
+            <a href="{% url 'reviews:create_search' %}" class="search-btn">
+                TMDB로 영화 검색해서 첫 리뷰 작성
+            </a>
+        </div>
     </div>
 {% endif %}
 

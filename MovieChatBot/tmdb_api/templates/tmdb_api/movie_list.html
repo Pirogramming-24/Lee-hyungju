@@ -2,21 +2,23 @@
 {% block title %}영화 찾아보기{% endblock %}
 
 {% block content %}
-<h2>TMDB 인기 영화 ({{ count }}개)</h2>
+<h2 class="movie-header">TMDB 인기 영화 ({{ count }}개)</h2>
 
-<ul>
+<div class="movie-grid">
   {% for m in movies %}
-    
-    <a href="{% url 'tmdb_api:movie_detail' m.id %}">
-      <li style="margin-bottom: 20px;">
-        <strong>{{ m.title }}</strong>
-        
-        <div>개봉일: {{ m.release_date }}</div>
+    <a href="{% url 'tmdb_api:movie_detail' m.id %}" class="movie-card">
+      <div class="movie-thumb">
         {% if m.poster_url %}
-          <img src="{{ m.poster_url }}" height="150">
+          <img src="{{ m.poster_url }}" alt="{{ m.title }}">
         {% endif %}
-      </li>
+      </div>
+
+      <div class="movie-body">
+        <h5 class="movie-title">{{ m.title }}</h5>
+        <div class="movie-meta">개봉일 {{ m.release_date }}</div>
+      </div>
     </a>
   {% endfor %}
-</ul>
+</div>
+
 {% endblock %}

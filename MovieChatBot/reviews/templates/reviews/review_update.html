@@ -2,22 +2,30 @@
 {% block title %}리뷰 수정{% endblock %}
 
 {% block content %}
-<h2>리뷰 수정</h2>
+<div class="form-wrapper">
+  <h2 class="form-title">리뷰 수정</h2>
 
-<form method="POST" enctype="multipart/form-data">
-  {% csrf_token %}
+  <form method="POST" enctype="multipart/form-data" class="review-form">
+    {% csrf_token %}
 
-  <!-- tmdb로 들어온 경우 유지 -->
-  <input type="hidden" name="tmdb_id" value="{{ tmdb_id }}">
+    {% for field in movie_form %}
+      <div class="form-row">
+        <label>{{ field.label }}</label>
+        {{ field }}
+      </div>
+    {% endfor %}
 
-  <h3>영화 정보</h3>
-  {{ movie_form.as_p }}
+    {% for field in review_form %}
+      <div class="form-row {% if field.field.widget.input_type == 'textarea' %}textarea-row{% endif %}">
+        <label>{{ field.label }}</label>
+        {{ field }}
+      </div>
+    {% endfor %}
 
-  <hr>
+    <div class="form-actions">
+      <button type="submit" class="submit-btn">수정</button>
+    </div>
+  </form>
+</div>
 
-  <h3>리뷰</h3>
-  {{ review_form.as_p }}
-
-  <button type="submit">저장</button>
-</form>
 {% endblock %}

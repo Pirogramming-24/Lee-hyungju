@@ -17,7 +17,8 @@ class MovieForm(forms.ModelForm):
             "runningTime": "러닝타임(분)",
             "overview": "줄거리",
             "release_date": "개봉일",
-            "poster_path": "포스터 URL",
+            "poster_path": "포스터 URL(TMDB 기본값)",
+            "poster_img": "포스터 사진(파일)",
         }
 
 class ReviewForm(forms.ModelForm):

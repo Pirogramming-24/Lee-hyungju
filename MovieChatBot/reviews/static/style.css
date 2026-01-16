@@ -1,3 +1,26 @@
+:root {
+  /* Base */
+  --bg-main: #0f1115;
+  --bg-card: #181b22;
+
+  /* Text */
+  --text-main: #1e1e1e;
+  --text-sub: rgba(230,232,238,0.7);
+
+  /* Border */
+  --border-soft: rgba(255,255,255,0.08);
+
+  /* Accent (Blue) */
+  --accent-main: #4f8cff;
+  --accent-soft: rgba(79,140,255,0.15);
+  --accent-hover: rgba(79,140,255,0.25);
+
+  --card-light: #ffffff;
+  --text-dark: #1f2937;   /* 거의 블랙 */
+  --text-muted: #6b7280; /* 회색 */
+  --border-light: #e5e7eb;
+}
+
 .site-header{
       background: #fff;
       border-bottom: 1px solid #e9ecef;
@@ -26,6 +49,17 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 32px;
+  margin-top: 16px;
+}
+
+@media (max-width: 1200px){
+  .review-grid{ grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 900px){
+  .review-grid{ grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px){
+  .review-grid{ grid-template-columns: 1fr; }
 }
 
 .review-card{
@@ -256,12 +290,20 @@
 }
 
 .submit-btn{
-  border: 1px solid #d1d5db;
-  background: #fff;
-  padding: 6px 16px;
-  border-radius: 6px;
-  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+
+  color: #fff;
+  background: var(--accent-main);
+  border: none;
 }
+
+.submit-btn:hover{
+  opacity: 0.9;
+}
+
 
 .empty-message{
   margin-top: 120px;
@@ -277,9 +319,320 @@
   margin-bottom: 16px;
 }
 
-.sort-bar select{
+.sort-bar select,input{
   padding: 6px 10px;
   border: 1px solid #d1d5db;
   border-radius: 6px;
   font-size: 0.9rem;
+}
+
+.sort-bar button{
+  padding: 6px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.search-btn{
+  display: inline-block;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+
+  color: var(--accent-main);
+  background: var(--accent-soft);
+  border: 1px solid var(--border-soft);
+}
+
+.search-btn:hover{
+  background: var(--accent-hover);
+}
+
+.movie-header{
+  margin-bottom: 20px;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.movie-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.movie-card{
+  display: block;
+  background: var(--card-light);
+  border-radius: 12px;
+  overflow: hidden;
+  text-decoration: none;
+  color: var(--text-dark);
+  border: 1px solid var(--border-light);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.movie-card:hover{
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+}
+
+.movie-thumb{
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  background: #f3f4f6;
+}
+
+
+.movie-thumb img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.movie-body{
+  padding: 12px;
+  background: #f8f9fa;
+}
+
+.movie-title{
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--text-dark);
+}
+
+.movie-year{
+  font-size:13px;
+  font-weight:600;
+  color:#6b7280;
+}
+
+.movie-cta{
+  display:inline-block;
+  padding:8px 12px;
+  border-radius:999px;
+  background:#fff7ed;
+  border:1px solid #fed7aa;
+  color:#9a3412;
+  font-size:13px;
+  font-weight:700;
+}
+
+.movie-meta{
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.movie-detail-card{
+  background: var(--card-light);
+  border-radius: 14px;
+  padding: 24px;
+  border: 1px solid var(--border-light);
+}
+
+.movie-detail-top{
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 24px;
+}
+
+.movie-detail-poster{
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  background: #f3f4f6;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.movie-detail-poster img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.poster-placeholder{
+  width: 100%;
+  height: 100%;
+  background: #e5e7eb;
+}
+
+.movie-detail-title{
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--text-dark);
+}
+
+.movie-detail-meta{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px 20px;
+  margin-bottom: 20px;
+}
+
+.movie-detail-meta dt{
+  font-size: 14px;        /* 기존 12~13 → 키움 */
+  font-weight: 600;
+  color: var(--accent-main);
+  margin-bottom: 6px;
+}
+
+.movie-detail-meta dd{
+  font-size: 17px;        /* 핵심 */
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+
+.movie-detail-actions{
+  margin-top: 12px;
+}
+
+.movie-detail-overview{
+  margin-top: 32px;
+  color: var(--text-dark);
+}
+
+.movie-detail-overview h4{
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.movie-detail-overview p{
+  line-height: 1.5;
+}
+
+@media (max-width: 768px){
+  .movie-detail-top{
+    grid-template-columns: 1fr;
+  }
+}
+
+.chat-wrap{
+  display:flex;
+  justify-content:center;
+  margin-top:30px;
+}
+
+/* 카드 */
+.chat-card{
+  width:min(760px, 92vw);
+  background:#ffffff;
+  border:1px solid #e5e7eb;
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 10px 28px rgba(0,0,0,.08);
+}
+
+/* 헤더 */
+.chat-header{
+  background:linear-gradient(90deg, #f97316, #fb923c);
+  color:#ffffff;
+  font-weight:800;
+  text-align:center;
+  padding:14px;
+}
+
+/* 바디 */
+.chat-body{
+  padding:16px;
+}
+
+/* 채팅 로그 */
+.chat-log{
+  height:420px;
+  overflow:auto;
+  padding:14px;
+  border-radius:14px;
+  background:#f3f4f6;
+  border:1px solid #e5e7eb;
+}
+
+/* 말풍선 공통 */
+.bubble{
+  max-width:78%;
+  padding:10px 12px;
+  border-radius:14px;
+  margin:8px 0;
+  white-space:pre-wrap;
+  line-height:1.45;
+  font-size:14px;
+}
+
+/* 사용자 */
+.me{
+  margin-left:auto;
+  background:#fff7ed;
+  color:#1f2937;
+  border:1px solid #fed7aa;
+  border-bottom-right-radius:6px;
+}
+
+/* 봇 */
+.bot{
+  margin-right:auto;
+  background:#ffffff;
+  color:#1f2937;
+  border:1px solid #e5e7eb;
+  border-bottom-left-radius:6px;
+}
+
+/* 추천 칩 */
+.chat-chips{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:12px;
+}
+
+.chip{
+  padding:7px 12px;
+  border-radius:999px;
+  background:#fff7ed;
+  border:1px solid #fed7aa;
+  color:#9a3412;
+  cursor:pointer;
+  font-size:13px;
+}
+
+.chip:hover{
+  background:#ffedd5;
+}
+
+/* 입력 영역 */
+.chat-input{
+  display:flex;
+  gap:10px;
+  padding:14px;
+  border-top:1px solid #e5e7eb;
+  background:#f9fafb;
+}
+
+.chat-input input{
+  flex:1;
+  padding:12px 14px;
+  border-radius:999px;
+  border:1px solid #e5e7eb;
+  background:#ffffff;
+  color:#1f2937;
+}
+
+.chat-input button{
+  padding:12px 18px;
+  border-radius:999px;
+  border:none;
+  background:#f97316;
+  color:#ffffff;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.chat-input button:hover{
+  background:#fb923c;
+}
+
+.chat-input button:disabled{
+  opacity:.5;
+  cursor:not-allowed;
 }

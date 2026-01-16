@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 
     "reviews",
-    "tmdb_api"
+    "tmdb_api",
+    "chatbot"
 ]
 
 MIDDLEWARE = [
