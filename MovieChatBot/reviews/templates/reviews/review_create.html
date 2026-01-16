@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}리뷰 작성{% endblock %}
+
+{% block content %}
+<h2>리뷰 작성</h2>
+
+<form method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+
+  <!-- tmdb로 들어온 경우 유지 -->
+  <input type="hidden" name="tmdb_id" value="{{ tmdb_id }}">
+
+  <h3>영화 정보</h3>
+  <a href="{% url 'reviews:create_search' %}">TMDB로 영화 검색해서 리뷰 작성</a>
+  {{ movie_form.as_p }}
+
+  <hr>
+
+  <h3>리뷰</h3>
+  {{ review_form.as_p }}
+
+  <button type="submit">저장</button>
+</form>
+{% endblock %}

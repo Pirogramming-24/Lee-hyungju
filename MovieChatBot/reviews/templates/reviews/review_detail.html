@@ -20,9 +20,10 @@
   <!-- 상단 박스: 이미지 + 정보 -->
   <section class="detail-top">
     <div class="detail-thumb">
-      {# 이미지 필드명은 본인 모델에 맞게 바꾸세요 #}
-      {% if review.imageURL %}
-        <img src="{{ review.imageURL }}" alt="{{ review.title }}">
+      {% if review.movie.poster_img %}
+        <img src="{{ review.movie.poster_img.url }}" alt="{{ review.movie.title }}">
+      {% elif review.movie.poster_path %}
+        <img src="{{ review.movie.poster_path }}" alt="{{ review.movie.title }}">
       {% else %}
         <div class="thumb-placeholder"></div>
       {% endif %}
@@ -30,23 +31,23 @@
 
     <div class="detail-info">
       <div class="info-row">  
-        <span class="meta-label">개봉년도</span>
-        <span class="meta-value">{{ review.releaseYear }}년</span>
+        <span class="meta-label">개봉일</span>
+        <span class="meta-value">{{ review.movie.release_date }}</span>
       </div>
 
       <div class="info-row">
         <span class="meta-label">감독</span>
-        <span class="meta-value">{{ review.director }}</span>
+        <span class="meta-value">{{ review.movie.director }}</span>
       </div>
 
       <div class="info-row">
         <span class="meta-label">주연</span>
-        <span class="meta-value">{{ review.leadActor }}</span>
+        <span class="meta-value">{{ review.movie.leadActor }}</span>
       </div>
 
       <div class="info-row">
         <span class="meta-label">장르</span>
-        <span class="meta-value">{{ review.genre }}</span>
+        <span class="meta-value">{{ review.movie.get_genre_display }}</span>
       </div>
 
       <div class="info-row">
@@ -59,7 +60,7 @@
 
       <div class="info-row">
         <span class="meta-label">러닝타임</span>
-        <span class="meta-value">{{ review.runningTime|minutes_to_time }}</span>
+        <span class="meta-value">{{ review.movie.runningTime|minutes_to_time }}</span>
       </div>
     </div>
   </section>

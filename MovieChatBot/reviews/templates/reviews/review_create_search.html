@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}영화 검색{% endblock %}
+
+{% block content %}
+<h2>TMDB 영화 검색</h2>
+
+<form method="GET">
+  <input type="text" name="q" value="{{ q }}" placeholder="영화 제목 검색">
+  <button type="submit">검색</button>
+</form>
+
+<hr>
+
+{% if q and results %}
+  <ul>
+    {% for m in results %}
+      <li style="margin-bottom:16px;">
+        <b>{{ m.title }}</b>
+        {% if m.release_date %} ({{ m.release_date|slice:":4" }}){% endif %}
+
+        <div>
+          <a href="{% url 'reviews:create' %}?tmdb_id={{ m.id }}">
+            이 영화로 리뷰 작성
+          </a>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+{% elif q %}
+  <p>검색 결과가 없습니다.</p>
+{% endif %}
+
+<hr>
+<a href="{% url 'reviews:create' %}">직접 추가로 리뷰 작성</a>
+{% endblock %}

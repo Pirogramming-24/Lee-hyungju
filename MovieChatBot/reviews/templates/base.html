@@ -20,15 +20,15 @@
         <nav class="navbar navbar-expand">
         <div class="container py-3 d-flex justify-content-between align-items-center">
             <!-- 왼쪽 로고 -->
-            <a class="brand" href="{% url 'reviews:reviews_list' %}">
+            <a class="brand" href="{% url 'reviews:review_list' %}">
                 <span class="my">my</span>
                 <span class="movie">Movie</span>
                 <span class="reviews">Reviews</span>
             </a>
 
             <!-- 오른쪽 링크 -->
-            <a class="header-link" href="#">
-                전체 리뷰
+            <a class="header-link" href="{% url 'tmdb_api:movie_list' %}">
+                영화 탐색
             </a>
             <a class="header-link" href="{% url 'reviews:create' %}">
                 새 리뷰 작성

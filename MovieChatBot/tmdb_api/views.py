@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .services import fetch_popular_movies, fetch_movie_detail, fetch_movie_credits, map_genre
+from .services import fetch_popular_movies, fetch_movie_detail, fetch_movie_credits, map_genre_by_id
 from .models import Movie
 # Create your views here.
 
@@ -34,7 +34,7 @@ def movie_detail(request, tmdb_id):
             "release_date": detail.get("release_date") or None,  # 모델이 DateField(null=True)여야 함
             "poster_path": detail.get("poster_url") or "",       # 지금 URLField로 쓰는 중
             "runningTime": detail.get("runtime") or None,
-            "genre": map_genre(detail),
+            "genre": map_genre_by_id(detail),
             "director": director,
             "leadActor": lead_actor,
         }

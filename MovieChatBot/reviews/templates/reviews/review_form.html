@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}리뷰 작성{% endblock %}
+
+{% block content %}
+<h2>리뷰 작성</h2>
+
+<div style="margin-bottom: 16px;">
+  <b>{{ movie.title }}</b><br>
+  감독: {{ movie.director|default:"(미기록)" }}<br>
+  주연: {{ movie.leadActor|default:"(미기록)" }}<br>
+  장르: {% if movie.genre %}{{ movie.get_genre_display }}{% else %}(미기록){% endif %}<br>
+</div>
+
+<form method="POST">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">저장</button>
+</form>
+{% endblock %}

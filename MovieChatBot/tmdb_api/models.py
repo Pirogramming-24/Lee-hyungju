@@ -14,12 +14,17 @@ class Movie(models.Model):
         ("ANIMATION", "애니메이션"),
         ("DOCUMENTARY", "다큐"),
     ]
-    tmdb_id = models.IntegerField(unique=True)
+    tmdb_id = models.IntegerField(unique=True, null=True, blank=True)
     title = models.CharField(max_length=64)
 
     overview = models.TextField(blank=True, default="")
     release_date = models.DateField(null=True, blank=True)
     poster_path = models.URLField(blank=True)
+    poster_img = models.ImageField(
+        upload_to="posters/",
+        null=True,
+        blank=True,
+    )
 
     director = models.CharField(max_length=50, null=True, blank=True)
     leadActor = models.CharField(max_length=50, null=True, blank=True)

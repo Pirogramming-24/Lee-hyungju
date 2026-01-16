@@ -72,23 +72,64 @@ def fetch_movie_credits(tmdb_id):
 
 
 # TMDB 장르 이름 -> 당신 코드(choices)로 매핑
-GENRE_MAP = {
-    "Action": "ACTION",
-    "Drama": "DRAMA",
-    "Comedy": "COMEDY",
-    "Romance": "ROMANCE",
-    "Thriller": "THRILLER",
-    "Horror": "HORROR",
-    "Science Fiction": "SF",
-    "Fantasy": "FANTASY",
-    "Animation": "ANIMATION",
-    "Documentary": "DOCUMENTARY",
+# GENRE_MAP = {
+#     "Action": "ACTION",
+#     "Drama": "DRAMA",
+#     "Comedy": "COMEDY",
+#     "Romance": "ROMANCE",
+#     "Thriller": "THRILLER",
+#     "Horror": "HORROR",
+#     "Science Fiction": "SF",
+#     "Fantasy": "FANTASY",
+#     "Animation": "ANIMATION",
+#     "Documentary": "DOCUMENTARY",
+# }
+
+# def map_genre(detail_json):
+#     genres = detail_json.get("genres") or []
+#     if not genres:
+#         return None
+#     # 첫 번째 장르만 저장(원하면 여러개로 바꾸면 됨)
+#     name = genres[0].get("name")
+#     return GENRE_MAP.get(name)
+
+
+GENRE_ID_MAP = {
+    28: "ACTION",
+    18: "DRAMA",
+    35: "COMEDY",
+    10749: "ROMANCE",
+    53: "THRILLER",
+    27: "HORROR",
+    878: "SF",
+    14: "FANTASY",
+    16: "ANIMATION",
+    99: "DOCUMENTARY",
+    # 필요하면 추가
 }
 
-def map_genre(detail_json):
+def map_genre_by_id(detail_json):
     genres = detail_json.get("genres") or []
-    if not genres:
-        return None
-    # 첫 번째 장르만 저장(원하면 여러개로 바꾸면 됨)
-    name = genres[0].get("name")
-    return GENRE_MAP.get(name)
+    # genres: [{"id": 28, "name": "액션"}, ...]
+    for g in genres:
+        gid = g.get("id")
+        if gid in GENRE_ID_MAP:
+            return GENRE_ID_MAP[gid]
+    return None
+
+def search_movies(query, language="ko-KR", page=1):
+    api_key = os.getenv("TMDB_API_KEY")
+    if not api_key:
+        raise RuntimeError("TMDB_API_KEY가 .env에 없습니다.")
+
+    data = _get(
+        f"{TMDB_BASE_URL}/search/movie",
+        {"api_key": api_key, "language": language, "query": query, "page": page},
+    )
+    results = data.get("results", [])
+
+    for m in results:
+        poster_path = m.get("poster_path") or ""
+        m["poster_url"] = f"{POSTER_BASE}{poster_path}" if poster_path else ""
+
+    return results

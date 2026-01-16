@@ -5,8 +5,10 @@
 {% block content %}
 <h2>{{ movie.title }}</h2>
 
-{% if movie.poster_path %}
-    <img src="{{ movie.poster_url }}" height="300">
+{% if movie.poster_img %}
+  <img src="{{ movie.poster_img.url }}">
+{% elif movie.poster_path %}
+  <img src="{{ movie.poster_path }}">
 {% endif %}
 
 <p><b>개봉일:</b> {{ movie.release_date }}</p>
@@ -14,6 +16,9 @@
 <p><b>주연:</b> {{ movie.leadActor|default:"(없음)" }}</p>
 <p><b>러닝타임:</b> {{ movie.runningTime|default:"(없음)" }}분</p>
 <p><b>장르:</b> {{ movie.genre_display|default:"(없음)" }}</p>
+<!-- <hr> -->
+<!-- <h4>DEBUG: TMDB genres raw</h4> -->
+<!-- <pre>{{ movie.genres }}</pre> -->
 
 
 <hr>
@@ -22,7 +27,7 @@
 
 <hr>
 
-<a href="{% url 'reviews:create' %}?movie_id={{ movie.id }}">
+<a href="{% url 'reviews:create' %}?tmdb_id={{ movie_obj.tmdb_id }}">
     리뷰 작성
 </a>
 {% endblock %}
