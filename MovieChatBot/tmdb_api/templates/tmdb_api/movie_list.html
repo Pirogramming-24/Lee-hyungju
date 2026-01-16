@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}영화 찾아보기{% endblock %}
+
+{% block content %}
+<h2>TMDB 인기 영화 ({{ count }}개)</h2>
+
+<ul>
+  {% for m in movies %}
+    
+    <a href="{% url 'tmdb_api:movie_detail' m.id %}">
+      <li style="margin-bottom: 20px;">
+        <strong>{{ m.title }}</strong>
+        
+        <div>개봉일: {{ m.release_date }}</div>
+        {% if m.poster_url %}
+          <img src="{{ m.poster_url }}" height="150">
+        {% endif %}
+      </li>
+    </a>
+  {% endfor %}
+</ul>
+{% endblock %}

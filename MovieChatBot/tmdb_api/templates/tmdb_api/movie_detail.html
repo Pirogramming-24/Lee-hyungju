@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}{{ movie.title }}{% endblock %}
+
+{% block content %}
+<h2>{{ movie.title }}</h2>
+
+{% if movie.poster_path %}
+    <img src="{{ movie.poster_url }}" height="300">
+{% endif %}
+
+<p><b>개봉일:</b> {{ movie.release_date }}</p>
+<p><b>감독:</b> {{ movie.director|default:"(없음)" }}</p>
+<p><b>주연:</b> {{ movie.leadActor|default:"(없음)" }}</p>
+<p><b>러닝타임:</b> {{ movie.runningTime|default:"(없음)" }}분</p>
+<p><b>장르:</b> {{ movie.genre_display|default:"(없음)" }}</p>
+
+
+<hr>
+
+<p>{{ movie.overview }}</p>
+
+<hr>
+
+<a href="{% url 'reviews:create' %}?movie_id={{ movie.id }}">
+    리뷰 작성
+</a>
+{% endblock %}

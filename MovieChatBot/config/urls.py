@@ -20,5 +20,5 @@ from django.urls import path, include
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("reviews.urls")),
-    path("api/tmdb/",include("tmdb_api.urls"))
+    path("", include("tmdb_api.urls"))
 ]
