@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<title>post_detail</title>
+<style>
+    main {
+        height: 100vh;
+        padding: 40px;
+    }
+    #ocr_status { margin-top: 8px; font-size: 14px; }
+</style>
+{% endblock %}
+
+{% block content %}
+<form id="postForm" action="{% url 'posts:create' %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div id="ocr_status"></div>
+    <button class="btn btn-primary">수정 완료</button>
+</form>
+
+<script defer src="{% static 'posts/js/nutrition_ocr.js' %}"></script>
+{% endblock %}
