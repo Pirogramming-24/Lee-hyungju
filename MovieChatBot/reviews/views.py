@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.db.models import Q
+from django.core.paginator import Paginator
 
 from tmdb_api.models import Movie
 from tmdb_api.services import fetch_movie_detail, fetch_movie_credits, map_genre_by_id, search_movies
@@ -12,13 +13,12 @@ def test(request):
     return render(request, "base.html")
 
 def review_list(request):
-    q = (request.GET.get("q") or "").strip()                 # 검색어
-    sort = request.GET.get("sort") or "recent"              # 정렬: title/rating/year/recent
-    source = request.GET.get("source") or "all"             # all/tmdb/manual
+    q = (request.GET.get("q") or "").strip()
+    sort = request.GET.get("sort") or "recent"
+    source = request.GET.get("source") or "all"
 
     qs = Review.objects.select_related("movie")
 
-    # 검색: 리뷰 제목/내용 + 영화 제목/감독/주연
     if q:
         qs = qs.filter(
             Q(title__icontains=q) |
@@ -28,31 +28,33 @@ def review_list(request):
             Q(movie__leadActor__icontains=q)
         )
 
-    # TMDB/직접 필터
-    # Review.source 필드가 있다면 그걸 쓰는 게 가장 정확함
     if source == "tmdb":
         qs = qs.filter(source="TMDB")
     elif source == "manual":
         qs = qs.filter(source="MANUAL")
 
-    # 정렬
     if sort == "title":
-        qs = qs.order_by("movie__title", "title", "-id")   # 영화제목→리뷰제목
+        qs = qs.order_by("movie__title", "title", "-id")
     elif sort == "rating":
         qs = qs.order_by("-rating", "-id")
     elif sort == "year":
-        qs = qs.order_by("-movie__release_date", "-id")    # 최신 개봉일(=연도) 우선
-    else:  # recent
+        qs = qs.order_by("-movie__release_date", "-id")
+    else:
         qs = qs.order_by("-id")
 
-    reviews = qs.all()
+    paginator = Paginator(qs, 20)  # ✅ 페이지당 20개
+
+    page_number = request.GET.get("page", "1")
+    page_obj = paginator.get_page(page_number)  # ✅ 잘못된 page면 자동 보정
 
     return render(request, "reviews/review_list.html", {
-        "reviews": reviews,
+        "page_obj": page_obj,          # ✅ 템플릿에서 이걸로 루프
+        "reviews": page_obj.object_list,  # (원하면 유지)
         "q": q,
         "sort": sort,
         "source": source,
     })
+
 
 def review_detail(request, pk):
     review = get_object_or_404(Review.objects.select_related("movie"), id=pk)
@@ -127,16 +129,41 @@ def review_create(request):
     }
     return render(request, "reviews/review_create.html", context)
 
+from django.shortcuts import render
+
 def review_create_search(request):
     q = (request.GET.get("q") or "").strip()
+
+    # page 파라미터 안전 처리
+    try:
+        page = int(request.GET.get("page", "1"))
+    except ValueError:
+        page = 1
+    if page < 1:
+        page = 1
+
     results = []
+    page_info = None
+
     if q:
-        results = search_movies(q, language="ko-KR")  # TMDB 검색 결과 리스트
+        data = search_movies(q, language="ko-KR", page=page)
+        results = data["results"]
+        page_info = {
+            "page": data["page"],
+            "total_pages": data["total_pages"],
+            "total_results": data["total_results"],
+            "has_prev": data["page"] > 1,
+            "has_next": data["page"] < data["total_pages"],
+            "prev_page": data["page"] - 1,
+            "next_page": data["page"] + 1,
+        }
 
     return render(request, "reviews/review_create_search.html", {
         "q": q,
         "results": results,
+        "page_info": page_info,
     })
+
 
 
 def review_update(request,pk):

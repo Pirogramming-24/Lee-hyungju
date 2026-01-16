@@ -2,7 +2,7 @@
 {% block title %}영화 찾아보기{% endblock %}
 
 {% block content %}
-<h2 class="movie-header">TMDB 인기 영화 ({{ count }}개)</h2>
+<h2 class="movie-header">TMDB 인기 영화</h2>
 
 <div class="movie-grid">
   {% for m in movies %}
@@ -20,5 +20,24 @@
     </a>
   {% endfor %}
 </div>
+
+{% if page_info.total_pages > 1 %}
+<div class="pagination" style="margin-top:24px; display:flex; gap:12px; justify-content:center;">
+  {% if page_info.has_prev %}
+    <a href="?page={{ page_info.prev_page }}">이전</a>
+  {% else %}
+    <span style="opacity:.4;">이전</span>
+  {% endif %}
+
+  <span>{{ page_info.page }} / {{ page_info.total_pages }}</span>
+
+  {% if page_info.has_next %}
+    <a href="?page={{ page_info.next_page }}">다음</a>
+  {% else %}
+    <span style="opacity:.4;">다음</span>
+  {% endif %}
+</div>
+{% endif %}
+
 
 {% endblock %}

@@ -14,12 +14,28 @@ from .models import Movie
 #     return render(request, "tmdb_api/popular_movies.html", {"movies": movies, "count": count})
 
 def movie_list(request):
-    count = int(request.GET.get("count", "30"))
-    count = max(20, min(40, count))  # 20~40 제한
+    try:
+        page = int(request.GET.get("page", "1"))
+    except ValueError:
+        page = 1
+    if page < 1:
+        page = 1
 
-    movies = fetch_popular_movies(count=count, language="ko-KR")
-    return render(request, "tmdb_api/movie_list.html", {"movies": movies, "count": count})
+    data = fetch_popular_movies(page=page, language="ko-KR")
 
+    page_info = {
+        "page": data["page"],
+        "total_pages": data["total_pages"],
+        "has_prev": data["page"] > 1,
+        "has_next": data["page"] < data["total_pages"],
+        "prev_page": data["page"] - 1,
+        "next_page": data["page"] + 1,
+    }
+
+    return render(request, "tmdb_api/movie_list.html", {
+        "movies": data["movies"],
+        "page_info": page_info,
+    })
 
 def movie_detail(request, tmdb_id):
     detail = fetch_movie_detail(tmdb_id, language="ko-KR")

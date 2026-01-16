@@ -39,10 +39,33 @@
         </a>
       {% endfor %}
     </div>
+
+    {# pagination #}
+    {% if page_info and page_info.total_pages > 1 %}
+      <div class="pagination" style="margin-top:20px; display:flex; gap:10px; justify-content:center; align-items:center;">
+        {% if page_info.has_prev %}
+          <a class="page-btn" href="?q={{ q|urlencode }}&page={{ page_info.prev_page }}">이전</a>
+        {% else %}
+          <span class="page-btn disabled" style="opacity:.4;">이전</span>
+        {% endif %}
+
+        <span class="page-status">
+          {{ page_info.page }} / {{ page_info.total_pages }}
+        </span>
+
+        {% if page_info.has_next %}
+          <a class="page-btn" href="?q={{ q|urlencode }}&page={{ page_info.next_page }}">다음</a>
+        {% else %}
+          <span class="page-btn disabled" style="opacity:.4;">다음</span>
+        {% endif %}
+      </div>
+    {% endif %}
+
   {% else %}
     <p class="empty-message">검색 결과가 없습니다.</p>
   {% endif %}
 {% endif %}
+
 
 
 <div class="form-actions" style="margin-top:24px;">

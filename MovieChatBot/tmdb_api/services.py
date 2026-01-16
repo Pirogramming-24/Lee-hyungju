@@ -9,29 +9,29 @@ def _get(params_url, params):
     r.raise_for_status()
     return r.json()
 
-def fetch_popular_movies(count=30, language="ko-KR"):
+def fetch_popular_movies(page=1, language="ko-KR"):
     api_key = os.getenv("TMDB_API_KEY")
     if not api_key:
         raise RuntimeError("TMDB_API_KEY가 .env에 없습니다.")
 
-    movies = []
-    page = 1
-    while len(movies) < count:
-        data = _get(
-            f"{TMDB_BASE_URL}/movie/popular",
-            {"api_key": api_key, "language": language, "page": page},
-        )
-        results = data.get("results", [])
-        if not results:
-            break
+    data = _get(
+        f"{TMDB_BASE_URL}/movie/popular",
+        {"api_key": api_key, "language": language, "page": page},
+    )
 
-        for m in results:
-            poster_path = m.get("poster_path") or ""
-            m["poster_url"] = f"{POSTER_BASE}{poster_path}" if poster_path else ""
-        movies.extend(results)
-        page += 1
+    results = data.get("results", [])
+    total_pages = data.get("total_pages", 1)
 
-    return movies[:count]
+    for m in results:
+        poster_path = m.get("poster_path") or ""
+        m["poster_url"] = f"{POSTER_BASE}{poster_path}" if poster_path else ""
+
+    return {
+        "movies": results,
+        "page": data.get("page", page),
+        "total_pages": total_pages,
+    }
+
 
 
 def fetch_movie_detail(tmdb_id, language="ko-KR"):
@@ -126,10 +126,20 @@ def search_movies(query, language="ko-KR", page=1):
         f"{TMDB_BASE_URL}/search/movie",
         {"api_key": api_key, "language": language, "query": query, "page": page},
     )
+
     results = data.get("results", [])
+    total_pages = data.get("total_pages", 1)
+    total_results = data.get("total_results", 0)
 
     for m in results:
         poster_path = m.get("poster_path") or ""
         m["poster_url"] = f"{POSTER_BASE}{poster_path}" if poster_path else ""
 
-    return results
+    return {
+        "results": results,
+        "page": data.get("page", page),
+        "total_pages": total_pages,
+        "total_results": total_results,
+    }
+
+
