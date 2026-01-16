@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<form method="get" class="sort-bar">
+  <select name="sort" onchange="this.form.submit()">
+    <option value="">정렬 기준</option>
+    <option value="latest" {% if sort == "latest" %}selected{% endif %}>최신개봉순</option>
+    <option value="rating" {% if sort == "rating" %}selected{% endif %}>별점순</option>
+    <option value="runtime" {% if sort == "runtime" %}selected{% endif %}>러닝타임순</option>
+  </select>
+</form>
+
+{% if reviews %}
+<div class="review-grid">
+    {% for review in reviews %}
+    <a href="{% url 'reviews:read' review.id %}" class="review-card">
+        <div class="review-thumb">
+            <img src="{{ review.imageURL }}" alt="">
+        </div>
+        <div class="review-body">
+            <h5 class="review-title">{{ review.title }}</h5>
+            <div class="review-meta">
+                <dl class="meta-label">개봉년도</dl>
+                <dt class="meta-value">{{ review.releaseYear }}</dt>
+            </div>
+            <div class="review-meta">
+                <dl class="meta-label">장르</dl>
+                <dt class="meta-value">{{ review.get_genre_display }}</dt>
+            </div>
+            <div class="review-meta">
+                <dl class="meta-label">별점</dl>
+                <dt class="meta-value">{{ review.rating }}</dt>
+            </div>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+{% else %}
+    <div class="empty-message">
+        등록된 리뷰가 없습니다.
+    </div>
+{% endif %}
+
+{% endblock content %}

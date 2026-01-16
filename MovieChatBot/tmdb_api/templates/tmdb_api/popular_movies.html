@@ -1,0 +1,12 @@
+<h1>TMDB 인기 영화 {{ count }}개</h1>
+<ul>
+  {% for m in movies %}
+    <li style="margin-bottom:16px;">
+      <b>{{ m.title }}</b> ({{ m.release_date }})<br/>
+      {% if m.poster_url %}
+        <img src="{{ m.poster_url }}" style="height:160px;" />
+      {% endif %}
+      <p>{{ m.overview }}</p>
+    </li>
+  {% endfor %}
+</ul>
