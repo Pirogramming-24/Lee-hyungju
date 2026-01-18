@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}영화 검색{% endblock %}
+
+{% block content %}
+<h2 class="movie-header">TMDB 영화 검색</h2>
+
+<div class="form-wrapper">
+  <form method="GET" class="review-form">
+    <div class="form-row">
+      <input type="text" name="q" value="{{ q }}" placeholder="영화 제목 검색">
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="submit-btn">검색</button>
+    </div>
+  </form>
+</div>
+
+{% if q %}
+  {% if results %}
+    <div class="movie-grid">
+      {% for m in results %}
+        <a href="{% url 'reviews:create' %}?tmdb_id={{ m.id }}" class="movie-card">
+          <div class="movie-thumb">
+            {% if m.poster_url %}
+              <img src="{{ m.poster_url }}" alt="{{ m.title }}">
+            {% else %}
+              <div class="poster-placeholder"></div>
+            {% endif %}
+          </div>
+
+          <div class="movie-body">
+            <h5 class="movie-title">
+              {{ m.title }}
+              {% if m.release_date %}<span class="movie-year">({{ m.release_date|slice:":4" }})</span>{% endif %}
+            </h5>
+
+            <div class="movie-cta">이 영화로 리뷰 작성</div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+
+    {# pagination #}
+    {% if page_info and page_info.total_pages > 1 %}
+      <div class="pagination" style="margin-top:20px; display:flex; gap:10px; justify-content:center; align-items:center;">
+        {% if page_info.has_prev %}
+          <a class="page-btn" href="?q={{ q|urlencode }}&page={{ page_info.prev_page }}">이전</a>
+        {% else %}
+          <span class="page-btn disabled" style="opacity:.4;">이전</span>
+        {% endif %}
+
+        <span class="page-status">
+          {{ page_info.page }} / {{ page_info.total_pages }}
+        </span>
+
+        {% if page_info.has_next %}
+          <a class="page-btn" href="?q={{ q|urlencode }}&page={{ page_info.next_page }}">다음</a>
+        {% else %}
+          <span class="page-btn disabled" style="opacity:.4;">다음</span>
+        {% endif %}
+      </div>
+    {% endif %}
+
+  {% else %}
+    <p class="empty-message">검색 결과가 없습니다.</p>
+  {% endif %}
+{% endif %}
+
+
+
+<div class="form-actions" style="margin-top:24px;">
+  <a href="{% url 'reviews:create' %}" class="search-btn">
+    직접 추가로 리뷰 작성
+  </a>
+</div>
+{% endblock %}

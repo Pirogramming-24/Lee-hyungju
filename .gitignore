@@ -211,3 +211,5 @@ migrations/
 
 # model 파일 추가
 hand_landmarker.task
+*.zip
+vector_store/

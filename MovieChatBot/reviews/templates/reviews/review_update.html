@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}리뷰 수정{% endblock %}
+
+{% block content %}
+<div class="form-wrapper">
+  <h2 class="form-title">리뷰 수정</h2>
+
+  <form method="POST" enctype="multipart/form-data" class="review-form">
+    {% csrf_token %}
+
+    {% for field in movie_form %}
+      <div class="form-row">
+        <label>{{ field.label }}</label>
+        {{ field }}
+      </div>
+    {% endfor %}
+
+    {% for field in review_form %}
+      <div class="form-row {% if field.field.widget.input_type == 'textarea' %}textarea-row{% endif %}">
+        <label>{{ field.label }}</label>
+        {{ field }}
+      </div>
+    {% endfor %}
+
+    <div class="form-actions">
+      <button type="submit" class="submit-btn">수정</button>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}리뷰 작성{% endblock %}
+
+{% block content %}
+<h2>리뷰 작성</h2>
+
+<div class="form-wrapper">
+  <h2 class="form-title">리뷰 작성</h2>
+    <div class="form-actions">
+      <a href="{% url 'reviews:create_search' %}" class="search-btn">TMDB로 영화 검색 리뷰 작성</a>
+    </div>
+      
+  <form method="POST" enctype="multipart/form-data" class="review-form">
+    {% csrf_token %}
+    <h3>영화</h3>
+    {% for field in movie_form %}
+      <div class="form-row">
+        <label>{{ field.label }}</label>
+        {{ field }}
+      </div>
+    {% endfor %}
+    <h3>리뷰</h3>
+    {% for field in review_form %}
+      <div class="form-row {% if field.field.widget.input_type == 'textarea' %}textarea-row{% endif %}">
+        <label>{{ field.label }}</label>
+        {{ field }}
+      </div>
+    {% endfor %}
+    
+
+    <div class="form-actions">
+      <button type="submit" class="submit-btn">저장</button>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

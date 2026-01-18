@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block content %}
+{% load display_filters %}
+
+<div class="review-detail">
+
+  <!-- 제목 + 수정/삭제 -->
+  <div class="detail-header">
+    <h2 class="detail-title">{{ review.title }}</h2>
+
+    <div class="detail-actions">
+      <a class="action-link" href="{% url 'reviews:update' review.id %}">수정</a>
+      <form action="{% url 'reviews:delete' review.id %}" method="post" class="delete-form">
+        {% csrf_token %}
+        <button type="submit" class="action-link action-danger">삭제</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 상단 박스: 이미지 + 정보 -->
+  <section class="detail-top">
+    <div class="detail-thumb">
+      {% if review.movie.poster_img %}
+        <img src="{{ review.movie.poster_img.url }}" alt="{{ review.movie.title }}">
+      {% elif review.movie.poster_path %}
+        <img src="{{ review.movie.poster_path }}" alt="{{ review.movie.title }}">
+      {% else %}
+        <div class="thumb-placeholder"></div>
+      {% endif %}
+    </div>
+
+    <div class="detail-info">
+      <div class="info-row">  
+        <span class="meta-label">개봉일</span>
+        <span class="meta-value">{{ review.movie.release_date }}</span>
+      </div>
+
+      <div class="info-row">
+        <span class="meta-label">감독</span>
+        <span class="meta-value">{{ review.movie.director }}</span>
+      </div>
+
+      <div class="info-row">
+        <span class="meta-label">주연</span>
+        <span class="meta-value">{{ review.movie.leadActor }}</span>
+      </div>
+
+      <div class="info-row">
+        <span class="meta-label">장르</span>
+        <span class="meta-value">{{ review.movie.get_genre_display }}</span>
+      </div>
+
+      <div class="info-row">
+        <span class="meta-label">별점</span>
+        <span class="meta-value">
+          {{ review.rating|rating_to_stars }}
+          ({{ review.rating }})
+        </span>
+      </div>
+
+      <div class="info-row">
+        <span class="meta-label">러닝타임</span>
+        <span class="meta-value">{{ review.movie.runningTime|minutes_to_time }}</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 내용 -->
+  <section class="detail-content">
+    <p class="content-text">{{ review.content }}</p>
+  </section>
+
+</div>
+
+{% endblock content %}

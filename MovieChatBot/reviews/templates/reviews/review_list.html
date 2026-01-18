@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="sort-bar">
+  <form method="GET" action="{% url 'reviews:review_list' %}">
+    <input
+      type="text"
+      name="q"
+      value="{{ q }}"
+      placeholder="리뷰 / 영화 검색"
+    >
+
+    <select name="sort">
+      <option value="recent" {% if sort == "recent" %}selected{% endif %}>최신</option>
+      <option value="title" {% if sort == "title" %}selected{% endif %}>제목순</option>
+      <option value="rating" {% if sort == "rating" %}selected{% endif %}>별점순</option>
+      <option value="year" {% if sort == "year" %}selected{% endif %}>최신년도순</option>
+    </select>
+
+    <select name="source">
+      <option value="all" {% if source == "all" %}selected{% endif %}>전체</option>
+      <option value="tmdb" {% if source == "tmdb" %}selected{% endif %}>TMDB</option>
+      <option value="manual" {% if source == "manual" %}selected{% endif %}>직접 추가</option>
+    </select>
+
+    <button type="submit">적용</button>
+  </form>
+</div>
+
+<div class="form-actions">
+    <a href="{% url 'reviews:create_search' %}" class="search-btn">
+        TMDB로 영화 검색해서 리뷰 작성
+    </a>
+</div>
+
+{% if reviews %}
+<div class="review-grid">
+    {% for review in reviews %}
+    <a href="{% url 'reviews:detail' review.id %}" class="review-card">
+        <div class="review-thumb">
+            <img src="{{ review.movie.poster_path }}" alt="">
+        </div>
+        <div class="review-body">
+            <h5 class="review-title">{{ review.title }}</h5>
+            <div class="review-meta">
+                <dl class="meta-label">개봉년도</dl>
+                <dt class="meta-value">{{ review.movie.release_date|date:"Y" }}</dt>
+            </div>
+            <div class="review-meta">
+                <dl class="meta-label">장르</dl>
+                <dt class="meta-value">{{ review.movie.get_genre_display }}</dt>
+            </div>
+            <div class="review-meta">
+                <dl class="meta-label">별점</dl>
+                <dt class="meta-value">{{ review.rating }}</dt>
+            </div>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+{% else %}
+    <div class="empty-message">
+        등록된 리뷰가 없습니다.
+        <div class="form-actions">
+            <a href="{% url 'reviews:create_search' %}" class="search-btn">
+                TMDB로 영화 검색해서 첫 리뷰 작성
+            </a>
+        </div>
+    </div>
+{% endif %}
+
+{% endblock content %}
