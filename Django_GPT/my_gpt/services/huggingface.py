@@ -1,17 +1,6 @@
 from transformers import pipeline
+from .nlp import translate_ko_en, translate_en_ko
 
-# 1) 번역 파이프라인
-# _translate_ko_en = pipeline(
-#     "translation",
-#     model="Helsinki-NLP/opus-mt-ko-en",
-# )
-
-# _translate_en_ko = pipeline(
-#     "translation",
-#     model="facebook/nllb-200-distilled-600M",
-#     src_lang="eng_Latn",
-#     tgt_lang="kor_Hang",
-# )
 
 # 2) 생성 파이프라인 (영어)
 _gen = pipeline(
@@ -19,25 +8,20 @@ _gen = pipeline(
     model="google/flan-t5-small",
 )
 
-def run_chat_pipeline(messages):
-    last_user = ""
-    for m in reversed(messages):
-        if m.get("role") == "user":
-            last_user = (m.get("content") or "").strip()
-            break
-
-    if not last_user:
+def _run_en_chat(en_question: str) -> str:
+    en_question = (en_question or "").strip()
+    if not en_question:
         return "I didn't get your message."
 
     prompt = (
         "Answer in English.\n"
-        "Write 5-8 sentences.\n"
-        "Be factual. If you are unsure, say \"I don't know\".\n"
-        f"Question: {last_user}\n"
+        "Write 4-8 sentences.\n"
+        "Be factual. If unsure, say you don't know.\n"
+        f"Question: {en_question}\n"
         "Answer:"
     )
 
-    out = _gen(
+    result = _gen(
         prompt,
         max_new_tokens=180,     # gpt2의 100보다 조금 늘리는게 자연스러움
         min_new_tokens=60,      # 단답 방지 핵심
@@ -48,6 +32,33 @@ def run_chat_pipeline(messages):
 
         repetition_penalty=1.15,   # FLAN은 1.2까지 안 줘도 됨(과하면 문장 끊김)
         no_repeat_ngram_size=4,
-    )[0]["generated_text"].strip()
+    )
 
+    out = (result[0].get("generated_text") or "").strip()
     return out or "I couldn't generate a good answer."
+
+def run_chat_pipeline(messages):
+    # 마지막 user만 사용 (기존 유지)
+    last_user = ""
+    for m in reversed(messages):
+        if m.get("role") == "user":
+            last_user = (m.get("content") or "").strip()
+            break
+
+    if not last_user:
+        return "메시지를 이해하지 못했습니다."
+
+    # 1) 한글 -> 영어
+    en_q = translate_ko_en(last_user)
+    if not en_q:
+        en_q = last_user  # 혹시 번역이 실패하면 그대로
+
+    # 2) 영어로 답 생성
+    en_a = _run_en_chat(en_q)
+
+    # 3) 영어 -> 한글
+    ko_a = translate_en_ko(en_a)
+    if not ko_a:
+        ko_a = "답변 생성은 됐는데 번역이 실패했습니다."
+
+    return ko_a

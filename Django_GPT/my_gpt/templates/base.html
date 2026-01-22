@@ -1,0 +1,46 @@
+{# templates/base.html #}
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}MyChatBot{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/reset.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  {% block extra_head %}{% endblock %}
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="header_container">
+      <div class="topbar-inner">
+        <a class="logo" href="{% url 'main' %}">MyChatBot</a>
+
+        <nav class="tabs" aria-label="상단 탭바">
+          {% if request.user.is_authenticated %}
+            <form method="post" action="{% url 'logout' %}" style="margin:0;">
+              {% csrf_token %}
+              <button type="submit" class="tab">로그아웃</button>
+            </form>
+          {% else %}
+            <a class="tab" href="{% url 'login' %}">로그인</a>
+          {% endif %}
+          <a class="tab {% if request.resolver_match.url_name == 'translate' %}active{% endif %}"
+            href="{% url 'translate' %}">번역</a>
+
+          <a class="tab {% if request.resolver_match.url_name == 'summarize' %}active{% endif %}"
+            href="{% url 'summarize' %}">요약</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="app">
+    
+    {% block content %}{% endblock %}
+  </main>
+  
+
+</body>
+</html>

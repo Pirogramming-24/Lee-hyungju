@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 
 from .models import Conversation, Message
 from .services.huggingface import run_chat_pipeline
+from .services.nlp import translate_ko_en, translate_en_ko, summarize_en
 
 @csrf_exempt
 @require_POST
@@ -72,6 +73,66 @@ def chat(request):
     )
 
     return JsonResponse({"reply": assistant_reply, "conversation_id": conversation.id})
+
+
+def translate_page(request):
+    return render(request, "my_gpt/translate.html")
+
+@csrf_exempt
+@require_POST
+def api_translate(request):
+    try:
+        body = json.loads(request.body.decode("utf-8"))
+    except Exception:
+        return JsonResponse({"error": "invalid json"}, status=400)
+
+    text = (body.get("text") or "").strip()
+    direction = (body.get("direction") or "ko_en").strip()  # "ko_en" | "en_ko"
+
+    if not text:
+        return JsonResponse({"error": "empty text"}, status=400)
+
+    if direction == "en_ko":
+        out = translate_en_ko(text)
+    else:
+        out = translate_ko_en(text)
+
+    return JsonResponse({"result": out})
+
+
+def summarize_page(request):
+    return render(request, "my_gpt/summarize.html")
+
+@csrf_exempt
+@require_POST
+def api_summarize(request):
+    try:
+        body = json.loads(request.body.decode("utf-8"))
+    except Exception:
+        return JsonResponse({"error": "invalid json"}, status=400)
+
+    text = (body.get("text") or "").strip()
+    output_lang = (body.get("output_lang") or "en").strip()  # "en" | "ko"
+
+    if not text:
+        return JsonResponse({"error": "empty text"}, status=400)
+
+    # 1) 입력이 한국어든 영어든, 일단 영어로 맞춰서 요약
+    en_text = translate_ko_en(text)
+    if not en_text:
+        # 입력이 이미 영어라서 번역 결과가 빈값일 가능성 대비(드물지만)
+        en_text = text
+
+    summary_en = summarize_en(en_text)
+
+    # 2) 출력 언어 토글
+    if output_lang == "ko":
+        result = translate_en_ko(summary_en)
+    else:
+        result = summary_en
+
+    return JsonResponse({"result": result})
+
 
 def main(request):
     if request.user.is_authenticated:

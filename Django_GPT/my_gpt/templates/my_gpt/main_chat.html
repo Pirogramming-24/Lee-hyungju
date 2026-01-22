@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<section class="chat-page">
+  <div class="chat-scroll" id="chat-box">
+    <div class="msg assistant">
+      <div class="bubble">봇과 채팅해 보세요. Ok 또는 Enter키를 통해 메시지를 전송할 수 있습니다.</div>
+    </div>
+    {% for m in messages %}
+      <div class="msg {{ m.role }}">
+        <div class="bubble">{{ m.content }}</div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="composer">
+    <div class="composer-inner">
+      <input class="composer-input" type="text" placeholder="메시지를 입력하세요" />
+      <button type="button" class="composer-btn">Ok</button>
+    </div>
+  </div>
+</section>
+
+<script>
+  window.CONVERSATION_ID = "{{ conversation_id }}";
+
+  // 페이지 열릴 때 맨 아래로
+  const box = document.getElementById("chat-box");
+  box.scrollTop = box.scrollHeight;
+</script>
+<script src="{% static 'js/main_chat.js' %}"></script>
+{% endblock %}

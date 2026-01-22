@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    {% load static %}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <title>My gpt</title>
+  </head>
+
+  <body>
+    <header>
+      <h1 class="title">GPT</h1>
+    </header>
+
+    <main>
+      <div class="chat-box" id="chat-box"></div>
+
+      <div class="search-bar">
+        <input class="search-input" type="text" />
+        <button type="button" class="search-btn">Ok</button>
+      </div>
+    </main>
+    <script>
+      window.CONVERSATION_ID = "{{ conversation_id }}";
+    </script>
+    <script src="{% static 'js/main.js' %}"></script>
+  </body>
+</html>

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}로그인 | MyChatBot{% endblock %}
+
+{% block content %}
+<section class="auth-page">
+  <div class="auth-card">
+    <h1 class="auth-title">로그인</h1>
+
+    <form method="post" class="auth-form">
+      {% csrf_token %}
+      {{ form.as_p }}
+
+      <button type="submit" class="composer-btn auth-submit">로그인</button>
+    </form>
+
+    <p class="auth-foot">
+      계정이 없나요?
+      <a class="auth-link" href="{% url 'signup' %}">회원가입</a>
+    </p>
+  </div>
+</section>
+{% endblock %}
