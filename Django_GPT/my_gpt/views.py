@@ -7,10 +7,20 @@ from django.db import transaction
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
+from urllib.parse import urlencode
 
 from .models import Conversation, Message
 from .services.huggingface import run_chat_pipeline
 from .services.nlp import translate_ko_en, translate_en_ko, summarize_en
+
+def _need_login_redirect(request):
+    login_url = reverse("login")
+    q = urlencode({
+        "next": request.get_full_path(),
+        "need_login": "1",
+    })
+    return redirect(f"{login_url}?{q}")
 
 @csrf_exempt
 @require_POST
@@ -76,6 +86,8 @@ def chat(request):
 
 
 def translate_page(request):
+    if not request.user.is_authenticated:
+        return _need_login_redirect(request)
     return render(request, "my_gpt/translate.html")
 
 @csrf_exempt
@@ -101,6 +113,8 @@ def api_translate(request):
 
 
 def summarize_page(request):
+    if not request.user.is_authenticated:
+        return _need_login_redirect(request)
     return render(request, "my_gpt/summarize.html")
 
 @csrf_exempt

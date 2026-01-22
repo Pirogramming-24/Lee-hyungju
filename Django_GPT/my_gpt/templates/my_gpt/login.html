@@ -3,6 +3,13 @@
 {% block title %}로그인 | MyChatBot{% endblock %}
 
 {% block content %}
+
+{% if request.GET.need_login  %}
+<script>
+  alert("로그인이 필요한 서비스입니다.");
+</script>
+{% endif %}
+
 <section class="auth-page">
   <div class="auth-card">
     <h1 class="auth-title">로그인</h1>
