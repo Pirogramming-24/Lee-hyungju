@@ -265,10 +265,13 @@ def story_detail(request, story_id):
         Story.objects.select_related("author").prefetch_related("items"),
         id=story_id
     )
+    stories = Story.objects.order_by("-created_at")
+    next_story = stories.filter(created_at__lt=story.created_at).first()
+    # print(next_story.id)
     # 만료 스토리는 접근 차단(원하면 404로)
     if story.expires_at <= timezone.now():
         return HttpResponseForbidden("만료된 스토리입니다.")
-    return render(request, "posts/story_detail.html", {"story": story})
+    return render(request, "posts/story_detail.html", {"story": story, "next_story": next_story})
 
 @login_required
 @require_POST
@@ -278,7 +281,8 @@ def story_item_delete(request, item_id):
         return HttpResponseForbidden("권한 없음")
 
     story = item.story
-    item.delete()
+    if request.method == "POST":
+        item.delete()
 
     if not story.items.exists():
         story.delete()

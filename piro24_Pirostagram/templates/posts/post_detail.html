@@ -60,7 +60,7 @@
     {% if post.author_id == user.id %}
       <div class="post-right">
         <a class="btn-outline" href="{% url 'posts:post_edit' post.id %}">수정</a>
-        <form action="{% url 'posts:post_delete' post.id %}" method="post" style="display:inline;">
+        <form data-delete-form action="{% url 'posts:post_delete' post.id %}" method="post" style="display:inline;">
           {% csrf_token %}
           <button class="btn-outline danger" type="submit">삭제</button>
         </form>
