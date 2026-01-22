@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}스토리{% endblock %}
+{% block content %}
+
+<div class="story-view" data-story-view>
+  <div class="story-top">
+    <a href="{% url 'accounts:profile' story.author.username %}" class="story-author">
+      {% if story.author.profile_pic %}
+        <img class="story-avatar" src="{{ story.author.profile_pic.url }}" alt="avatar">
+      {% else %}
+        <span class="story-avatar fallback"></span>
+      {% endif %}
+      <b>{{ story.author.username }}</b>
+    </a>
+    <a class="btn-outline" href="{% url 'posts:feed' %}">닫기</a>
+  </div>
+
+  <div class="story-bars" data-bars>
+    {% for item in story.items.all %}
+      <div class="bar"><div class="bar-fill"></div></div>
+    {% endfor %}
+  </div>
+
+  <div class="story-stage" data-stage>
+    {% for item in story.items.all %}
+      <img
+        class="story-img {% if forloop.first %}is-active{% endif %}"
+        src="{{ item.image.url }}"
+        alt="story"
+        loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+      >
+    {% endfor %}
+    <button class="story-nav left" type="button" data-prev aria-label="prev"></button>
+    <button class="story-nav right" type="button" data-next aria-label="next"></button>
+
+  </div>
+</div>
+
+<script src="{% static 'js/story.js' %}"></script>
+{% endblock %}

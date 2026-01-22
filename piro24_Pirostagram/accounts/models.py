@@ -5,7 +5,7 @@ from django.db.models import Q, UniqueConstraint
 
 class User(AbstractUser):
     name = models.CharField(max_length=30, blank=True)
-    avatar = models.ImageField(upload_to="avatars/", blank=True, null=True)
+    profile_pic = models.ImageField(upload_to="profile_pic/", blank=True, null=True)
     bio = models.TextField(blank=True)
 
 class Follow(models.Model):

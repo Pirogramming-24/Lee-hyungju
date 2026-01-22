@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}유저 검색{% endblock %}
+
+{% block content %}
+<section class="card">
+  <h2>유저 검색</h2>
+
+  <form class="search-form" method="get" action="{% url 'accounts:search' %}">
+    <input
+      type="text"
+      name="q"
+      placeholder="아이디 또는 이름으로 검색"
+      value="{{ request.GET.q }}"
+    >
+    <button class="btn" type="submit">검색</button>
+  </form>
+</section>
+
+<section class="card">
+  {% if request.GET.q %}
+    <p class="muted">“{{ request.GET.q }}” 검색 결과</p>
+
+    {% if users %}
+      <ul class="user-list">
+        {% for u in users %}
+          <li class="user-item">
+            <a class="user-link" href="{% url 'accounts:profile' u.username %}">
+              <span class="avatar">
+                {% if u.profile_pic %}
+                  <img src="{{ u.profile_pic.url }}" alt="profile">
+                {% else %}
+                  <span class="avatar-fallback"></span>
+                {% endif %}
+              </span>
+              <div class="user-meta">
+                <b>{{ u.username }}</b>
+                {% if u.name %}<span class="muted">{{ u.name }}</span>{% endif %}
+              </div>
+            </a>
+
+            <div class="user-actions">
+              {% if u.id != user.id %}
+                <form action="{% url 'accounts:follow_toggle' u.username %}" method="post">
+                  {% csrf_token %}
+                  {% if u.id in following_ids %}
+                    <button class="btn-outline" type="submit">언팔로우</button>
+                  {% else %}
+                    <button class="btn" type="submit">팔로우</button>
+                  {% endif %}
+                </form>
+              {% endif %}
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="muted">검색 결과가 없습니다.</p>
+    {% endif %}
+  {% else %}
+    <p class="muted">검색어를 입력하세요.</p>
+  {% endif %}
+</section>
+{% endblock %}

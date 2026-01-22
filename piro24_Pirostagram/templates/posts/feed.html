@@ -1,0 +1,114 @@
+<!-- templates/posts/feed.html -->
+{% extends "base.html" %}
+{% block title %}피드{% endblock %}
+
+{% block content %}
+  <section class="card">
+    <div class="card-header">
+      <h2>스토리</h2>
+      <a class="link" href="{% url 'posts:story_list' %}">전체보기</a>
+    </div>
+
+    {% if stories %}
+      <div class="story-row">
+        {% for s in stories %}
+          <a class="story-bubble" href="{% url 'posts:story_detail' s.id %}">
+            <div class="avatar">
+              {% if s.author.profile_pic %}
+                <img src="{{ s.author.profile_pic.url }}" alt="profile">
+              {% else %}
+                <div class="avatar-fallback"></div>
+              {% endif %}
+            </div>
+            <div class="story-name">{{ s.author.username }}</div>
+          </a>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="muted">스토리가 없습니다.</p>
+    {% endif %}
+  </section>
+
+  <section class="feed">
+    <div class="card-header">
+      <h2>피드</h2>
+    </div>
+    <div class="feed-toolbar">
+      <a class="chip {% if sort == 'recent' %}active{% endif %}" href="?sort=recent">최신</a>
+      <a class="chip {% if sort == 'likes' %}active{% endif %}" href="?sort=likes">좋아요</a>
+      <a class="chip {% if sort == 'comments' %}active{% endif %}" href="?sort=comments">댓글</a>
+    </div>
+    {% for p in posts %}
+      <article class="post card" data-post>
+        <div class="post-top">
+          <a class="post-user" href="{% url 'accounts:profile' p.author.username %}">
+            <span class="mini-avatar">
+              {% if p.author.profile_pic %}
+                <img src="{{ p.author.profile_pic.url }}" alt="profile">
+              {% else %}
+                <span class="mini-avatar-fallback"></span>
+              {% endif %}
+            </span>
+            <b>{{ p.author.username }}</b>
+          </a>
+          <span class="muted">{{ p.created_at|date:"m/d H:i" }}</span>
+        </div>
+
+        {% if p.images.all %}
+          <div class="carousel" data-carousel>
+            <button class="carousel-btn prev" type="button" data-prev aria-label="prev">‹</button>
+
+            <div class="carousel-viewport" data-viewport>
+              {% for img in p.images.all %}
+                <img
+                  class="carousel-img {% if forloop.first %}is-active{% endif %}"
+                  src="{{ img.image.url }}"
+                  alt="post image"
+                  loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+                  fetchpriority="{% if forloop.first %}high{% else %}auto{% endif %}"
+                >
+              {% endfor %}
+
+            </div>
+
+            <button class="carousel-btn next" type="button" data-next aria-label="next">›</button>
+
+            <div class="carousel-dots" data-dots></div>
+          </div>
+        {% endif %}
+
+
+        {% if p.content %}
+          <p class="post-content">{{ p.content|linebreaksbr }}</p>
+        {% endif %}
+
+        <div class="post-actions">
+          <button
+            class="like-btn {% if p.liked_by_me %}liked{% endif %}"
+            data-like-btn
+            data-post-id="{{ p.id }}"
+            data-csrf="{{ csrf_token }}"
+            type="button"
+          >
+            👍 좋아요
+          </button>
+          <span class="muted">좋아요 <b data-like-count>{{ p.like_count }}</b></span>
+          <span class="muted">댓글 <b>{{ p.comment_count }}</b></span>
+
+          <a class="btn-outline" href="{% url 'posts:post_detail' p.id %}">상세</a>
+          {% if p.author_id == user.id %}
+            <div class="post-right"></div>
+              <a class="btn-outline" href="{% url 'posts:post_edit' p.id %}">수정</a>
+              <form action="{% url 'posts:post_delete' p.id %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button class="btn-outline danger" type="submit">삭제</button>
+              </form>
+            </div>
+          {% endif %}
+        </div>
+      </article>
+    {% empty %}
+      <p class="muted">피드에 게시글이 없습니다.</p>
+    {% endfor %}
+  </section>
+{% endblock %}
