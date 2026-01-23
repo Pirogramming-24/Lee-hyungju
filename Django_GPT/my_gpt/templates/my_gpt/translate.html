@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<section class="tool-page">
+  <div class="tool-grid">
+    <!-- Left: Input -->
+    <div class="tool-card">
+      <div class="tool-card-head">
+        <div class="tool-title" id="dir-label">입력 (한국어)</div>
+        <div class="tool-actions">
+          <button type="button" class="tab active" id="btn-ko-en">한→영</button>
+          <button type="button" class="tab" id="btn-en-ko">영→한</button>
+        </div>
+      </div>
+
+      <div class="tool-body">
+        <textarea class="tool-textarea" id="tr-in" placeholder="번역할 내용을 입력하세요"></textarea>
+      </div>
+
+      <div class="tool-card-head tool-footer">
+        <button type="button" class="composer-btn" id="tr-run">번역</button>
+      </div>
+    </div>
+
+    <!-- Right: Output -->
+    <div class="tool-card">
+      <div class="tool-card-head">
+        <div class="tool-title" id="out-label">출력 (영어)</div>
+        <div class="tool-actions">
+          <button type="button" class="tab" id="copy-btn">복사</button>
+          <button type="button" class="tab" id="clear-btn">초기화</button>
+        </div>
+      </div>
+
+      <div class="tool-body">
+        <div class="tool-output" id="tr-out"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="{% static 'js/translate.js' %}"></script>
+
+{% endblock %}

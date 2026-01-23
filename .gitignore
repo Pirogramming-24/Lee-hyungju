@@ -208,6 +208,7 @@ __marimo__/
 
 # Django
 migrations/
+media/
 
 # model 파일 추가
 hand_landmarker.task

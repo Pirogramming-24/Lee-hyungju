@@ -1,0 +1,23 @@
+<!-- templates/posts/story_list.html -->
+{% extends "base.html" %}
+{% block title %}스토리{% endblock %}
+{% block content %}
+<section class="card">
+  <div class="card-header">
+    <h2>스토리 목록</h2>
+    <a class="btn" href="{% url 'posts:story_create' %}">+ 스토리 올리기</a>
+  </div>
+
+  <div class="list">
+    {% for s in stories %}
+      <a class="list-item" href="{% url 'posts:story_detail' s.id %}">
+        <b>{{ s.author.username }}</b>
+        <span class="muted">{{ s.created_at|date:"m/d H:i" }}</span>
+        <span class="muted">만료: {{ s.expires_at|date:"m/d H:i" }}</span>
+      </a>
+    {% empty %}
+      <p class="muted">스토리가 없습니다.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

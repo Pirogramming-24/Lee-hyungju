@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<section class="tool-page">
+  <div class="tool-grid">
+    <!-- Left: Input -->
+    <div class="tool-card">
+      <div class="tool-card-head">
+        <div class="tool-title">입력</div>
+        <div class="tool-actions">
+          <button type="button" class="tab" id="clear-in-btn">초기화</button>
+        </div>
+      </div>
+
+      <div class="tool-body">
+        <textarea class="tool-textarea" id="sum-in" placeholder="요약할 텍스트를 입력하세요"></textarea>
+      </div>
+
+      <div class="tool-card-head tool-footer">
+        <button type="button" class="composer-btn" id="sum-run">요약</button>
+      </div>
+    </div>
+
+    <!-- Right: Output -->
+    <div class="tool-card">
+      <div class="tool-card-head">
+        <div class="tool-title" id="out-title">출력 (영어 요약)</div>
+        <div class="tool-actions">
+          <button type="button" class="tab active" id="btn-out-en">EN</button>
+          <button type="button" class="tab" id="btn-out-ko">KO</button>
+          <button type="button" class="tab" id="copy-out-btn">복사</button>
+          <button type="button" class="tab" id="clear-out-btn">초기화</button>
+        </div>
+      </div>
+
+      <div class="tool-body">
+        <div class="tool-output" id="sum-out"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="{% static 'js/summarize.js' %}"></script>
+{% endblock %}

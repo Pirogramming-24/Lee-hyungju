@@ -1,0 +1,14 @@
+<!-- templates/posts/story_form.html -->
+{% extends "base.html" %}
+{% block title %}스토리 업로드{% endblock %}
+{% block content %}
+<section class="card">
+  <h2>스토리 업로드(여러 장)</h2>
+  <form method="post" enctype="multipart/form-data" class="form">
+    {% csrf_token %}
+    <label>사진(여러 장 가능)</label>
+    <input type="file" name="images" accept="image/*" multiple required>
+    <button class="btn" type="submit">업로드</button>
+  </form>
+</section>
+{% endblock %}

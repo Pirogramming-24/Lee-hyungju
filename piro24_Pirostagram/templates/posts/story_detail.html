@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}스토리{% endblock %}
+{% block content %}
+
+<div class="story-view" data-story-view 
+    {% if next_story %}
+      data-next-story-url="{% url 'posts:story_detail' next_story.id %}"
+    {% endif %}>
+  <div class="story-top">
+  <a href="{% url 'accounts:profile' story.author.username %}" class="story-author">
+    {% if story.author.profile_pic %}
+      <img class="story-avatar" src="{{ story.author.profile_pic.url }}" alt="avatar">
+    {% else %}
+      <span class="story-avatar fallback"></span>
+    {% endif %}
+    <b>{{ story.author.username }}</b>
+  </a>
+
+  <div style="display:flex; gap:8px;">
+    <button class="btn-outline" type="button" data-pause>⏸</button>
+    {% if story.author_id == user.id %}
+      <form data-delete-form method="post" style="display:inline;">
+        {% csrf_token %}
+        <button class="btn-outline danger" type="submit"
+                onclick="return confirm('이 스토리를 삭제할까요?');">
+          삭제
+        </button>
+      </form>
+    {% endif %}
+    <a class="btn-outline" href="{% url 'posts:feed' %}">닫기</a>
+  </div>
+</div>
+
+
+  <div class="story-bars" data-bars>
+    {% for item in story.items.all %}
+      <div class="bar"><div class="bar-fill"></div></div>
+    {% endfor %}
+  </div>
+
+  <div class="story-stage" data-stage>
+    {% for item in story.items.all %}
+      <img
+        class="story-img {% if forloop.first %}is-active{% endif %}"
+        src="{{ item.image.url }}"
+        alt="story"
+        loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+        data-item-id="{{ item.id }}"
+      >
+    {% endfor %}
+    <button class="story-nav left" type="button" data-prev aria-label="prev"></button>
+    <button class="story-nav right" type="button" data-next aria-label="next"></button>
+  </div>
+</div>
+
+<script src="{% static 'js/story.js' %}"></script>
+{% endblock %}

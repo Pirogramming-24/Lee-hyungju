@@ -1,0 +1,41 @@
+<!-- templates/posts/post_form.html -->
+{% extends "base.html" %}
+{% block title %}게시글{% endblock %}
+
+{% block content %}
+<section class="card">
+  <h2>{{ mode|default:"게시글" }}</h2>
+
+  <form method="post" enctype="multipart/form-data" class="form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <label>사진(여러 장 가능)</label>
+    <input type="file" name="images" accept="image/*" multiple>
+    <button class="btn" type="submit">저장</button>
+  </form>
+
+
+  {% if post and post.images.all %}
+  <hr>
+  <p class="muted">기존 이미지</p>
+
+  <div class="grid">
+    {% for img in post.images.all %}
+      <div style="position:relative;">
+        <img class="thumb" src="{{ img.image.url }}" alt="img">
+
+        <form
+          action="{% url 'posts:post_image_delete' img.id %}"
+          method="post"
+          style="position:absolute; top:6px; right:6px;"
+        >
+          {% csrf_token %}
+          <button type="submit" class="btn-outline danger">✕</button>
+        </form>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+</section>
+{% endblock %}

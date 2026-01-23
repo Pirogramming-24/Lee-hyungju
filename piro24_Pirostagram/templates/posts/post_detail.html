@@ -1,0 +1,106 @@
+<!-- templates/posts/post_detail.html -->
+{% extends "base.html" %}
+{% block title %}게시글 상세{% endblock %}
+
+{% block content %}
+<article class="card">
+  <div class="post-top">
+    <a class="post-user" href="{% url 'accounts:profile' post.author.username %}">
+      <span class="mini-avatar">
+        {% if post.author.profile_pic %}
+          <img src="{{ post.author.profile_pic.url }}" alt="profile">
+        {% else %}
+          <span class="mini-avatar-fallback"></span>
+        {% endif %}
+      </span>
+      <b>{{ post.author.username }}</b>
+    </a>
+    <span class="muted">{{ post.created_at|date:"Y-m-d H:i" }}</span>
+  </div>
+
+  {% if post.images.all %}
+    <div class="carousel" data-carousel>
+      <button class="carousel-btn prev" type="button" data-prev aria-label="prev">‹</button>
+
+      <div class="carousel-viewport" data-viewport>
+        {% for img in post.images.all %}
+          <img
+            class="carousel-img {% if forloop.first %}is-active{% endif %}"
+            src="{{ img.image.url }}"
+            alt="post image"
+            loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+            fetchpriority="{% if forloop.first %}high{% else %}auto{% endif %}"
+          >
+        {% endfor %}
+
+      </div>
+
+      <button class="carousel-btn next" type="button" data-next aria-label="next">›</button>
+
+      <div class="carousel-dots" data-dots></div>
+    </div>
+  {% endif %}
+
+
+  {% if post.content %}
+    <p class="post-content">{{ post.content|linebreaksbr }}</p>
+  {% endif %}
+
+  <div class="post-actions">
+    <button
+      class="like-btn {% if liked %}liked{% endif %}"
+      data-like-btn
+      data-post-id="{{ post.id }}"
+      data-csrf="{{ csrf_token }}"
+      type="button"
+    >
+      👍 좋아요
+    </button>
+    <span class="muted">좋아요 <b data-like-count>{{ like_count }}</b></span>
+    {% if post.author_id == user.id %}
+      <div class="post-right">
+        <a class="btn-outline" href="{% url 'posts:post_edit' post.id %}">수정</a>
+        <form data-delete-form action="{% url 'posts:post_delete' post.id %}" method="post" style="display:inline;">
+          {% csrf_token %}
+          <button class="btn-outline danger" type="submit">삭제</button>
+        </form>
+      </div>
+    {% endif %}
+  </div>
+</article>
+
+<section class="card">
+  <h3>댓글</h3>
+
+  <form method="post" class="comment-form">
+    {% csrf_token %}
+    {{ form.content }}
+    <button class="btn" type="submit">등록</button>
+  </form>
+
+
+  <div class="comment-list">
+    {% for c in comments %}
+      <div class="comment">
+        <div class="comment-meta">
+          <a href="{% url 'accounts:profile' c.author.username %}"><b>{{ c.author.username }}</b></a>
+          <span class="muted">{{ c.created_at|date:"m/d H:i" }}</span>
+        </div>
+        <div class="comment-body">{{ c.content }}</div>
+
+        {% if c.author_id == user.id %}
+          <div class="comment-actions">
+            <a class="btn-outline" href="{% url 'posts:comment_edit' c.id %}">수정</a>
+            <form action="{% url 'posts:comment_delete' c.id %}" method="post" style="display:inline;">
+              {% csrf_token %}
+              <button class="btn-outline danger" type="submit">삭제</button>
+            </form>
+          </div>
+        {% endif %}
+      </div>
+    {% empty %}
+      <p class="muted">댓글이 없습니다.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

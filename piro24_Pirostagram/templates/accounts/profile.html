@@ -1,0 +1,66 @@
+<!-- templates/accounts/profile.html -->
+{% extends "base.html" %}
+{% block title %}프로필{% endblock %}
+
+{% block content %}
+<section class="card profile">
+  <div class="profile-left">
+    <div class="profile-pic">
+      {% if profile_user.profile_pic %}
+        <img src="{{ profile_user.profile_pic.url }}" alt="profile">
+      {% else %}
+        <div class="profile-pic-fallback"></div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="profile-right">
+    <div class="profile-top">
+      <h2>{{ profile_user.username }}</h2>
+
+      {% if user.is_authenticated and user.id != profile_user.id %}
+        <form method="post" action="{% url 'accounts:follow_toggle' profile_user.username %}">
+          {% csrf_token %}
+          <button class="btn" type="submit">
+            {% if is_following %}언팔로우{% else %}팔로우{% endif %}
+          </button>
+        </form>
+      {% endif %}
+    </div>
+
+    <div class="profile-stats">
+      <span>게시글 <b>{{ post_count }}</b></span>
+      <span>팔로워 <b>{{ follower_count }}</b></span>
+      <span>팔로잉 <b>{{ following_count }}</b></span>
+    </div>
+
+    <div class="profile-bio">
+      <b>{{ profile_user.name }}</b>
+      <div class="muted">{{ profile_user.bio|linebreaksbr }}</div>
+    </div>
+    <!-- profile.html 내부 적당한 위치에 추가 -->
+    {% if user.is_authenticated and user.id == profile_user.id %}
+      <a class="btn" href="{% url 'accounts:profile_edit' %}">프로필 수정</a>
+    {% endif %}
+  </div>
+</section>
+
+<section class="card">
+  <h3>게시글</h3>
+  <div class="grid">
+    {% for p in posts %}
+      <a class="grid-item" href="{% url 'posts:post_detail' p.id %}">
+        {% with first=p.images.all.0 %}
+          {% if first %}
+            <img class="thumb" src="{{ first.image.url }}" alt="thumb">
+          {% else %}
+            <div class="thumb-fallback">NO IMAGE</div>
+          {% endif %}
+        {% endwith %}
+      </a>
+    {% empty %}
+      <p class="muted">게시글이 없습니다.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
